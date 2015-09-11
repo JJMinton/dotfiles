@@ -1,0 +1,5 @@
+"Disable arrow keys to break habits
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
