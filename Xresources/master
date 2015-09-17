@@ -1,0 +1,3 @@
+xterm*background: black
+xterm*foreground: rgb:00/aa/00
+xterm*faceName: DejaVu Sans Mono:size=8:antialias=false
