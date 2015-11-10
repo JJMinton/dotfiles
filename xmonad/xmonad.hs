@@ -21,7 +21,7 @@ xmonad $ defaultConfig
      layoutHook = avoidStruts $ layoutHook defaultConfig,
      --layoutHook = myLayout,
      workspaces = myWorkspaces,
-     manageHook = manageDocks <+> manageHook defaultConfig,
+     manageHook = manageDocks <+> manageHook defaultConfig, --requires the installation of xmonad-contrib ? 
      logHook = dynamicLogWithPP xmobarPP
         { ppOutput = hPutStrLn xmproc,
           ppTitle = xmobarColor "blue" "" . shorten 50,

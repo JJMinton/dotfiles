@@ -9,9 +9,10 @@ Config { font = "xft:Bitstream Vera Sans Mono:size=9:bold:antialias=true"
         , Run Date "%a %b %_d %l:%M" "date" 10  
         , Run Com "/home/jjm61/dotfiles/scripts/volume.sh" [] "volume" 10  
         , Run Com "/home/jjm61/dotfiles/scripts/battery.sh" [] "battery" 10  
+        , Run Com "/home/jjm61/dotfiles/scripts/powerSupply.sh" [] "power" 10  
         , Run StdinReader  
     ]  
     , sepChar = "%"  
     , alignSep = "}{"  
-    , template = " %StdinReader%}{ <fc=grey>%cpu% </fc> <fc=red>%cpuTemp%</fc>°C<fc=grey> ~ %memory% ~ %eth0%</fc> ~ Batt: <fc=green>%battery%</fc> ~ <fc=#ee9a00>%date%</fc> ~ Vol: <fc=green>%volume%</fc> "  
+    , template = " %StdinReader%}{ <fc=grey>%cpu% </fc> <fc=red>%cpuTemp%</fc>degrees C<fc=grey> ~ %memory% ~ %eth0%</fc> ~ Batt: <fc=green>%battery%</fc> ~ Pow: %power% ~ <fc=#ee9a00>%date%</fc> ~ Vol: <fc=green>%volume%</fc> "  
     }
