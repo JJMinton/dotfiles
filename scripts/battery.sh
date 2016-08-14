@@ -1,6 +1,11 @@
 #!/bin/bash
-bat1=`cat /sys/class/power_supply/BAT1/energy_now`
-bat1cap=`cat /sys/class/power_supply/BAT1/energy_full`
-bat2=`cat /sys/class/power_supply/BAT2/energy_now`
-bat2cap=`cat /sys/class/power_supply/BAT2/energy_full`
-echo "$((100 * $bat1 / $bat1cap)), $((100 * $bat2 / $bat2cap))"
+
+battery_list="Batt: "
+for dir in `find /sys/class/power_supply/ -name "BAT*"`; do
+	bat=`cat $dir/energy_now`
+	batcap=`cat $dir/energy_full`
+	batperc=$((100*bat/batcap))
+	battery_list="$battery_list $batperc,"
+done
+batts=`echo $battery_list | sed 's/,$//'`
+echo $batts
