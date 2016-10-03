@@ -1,2 +1,3 @@
 #!/bin/bash
-xrdb ./dotfiles/Xresources/master
+ln -s .Xresources ~/.Xresources
+ln -s .Xresources.d ~/.Xresources.d
