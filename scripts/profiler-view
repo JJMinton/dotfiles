@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pyprof2calltree -i $1 -k
