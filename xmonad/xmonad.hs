@@ -20,7 +20,7 @@ modm = mod1Mask
 
 --Define workspaces names
 myExtraWorkspaces = [(xK_0, "0:✍"), (xK_minus, "-:"), (xK_equal, "=:☜"), (xK_grave, "`:✉")]
-myWorkspaces = ["1:✎","2:✑","3:☝","4:⌨","5:✒","6:☞","7:reading","8:♫","9:☺"] ++ (map snd myExtraWorkspaces)
+myWorkspaces = ["1:✎","2:✑","3:☝","4:⌨","5:✒","6:☞","7:‖/","8:♫","9:☺"] ++ (map snd myExtraWorkspaces)
 
 
 -- Key bindings
