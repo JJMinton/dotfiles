@@ -1,11 +1,15 @@
 import XMonad
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
-import XMonad.Util.EZConfig(additionalKeysP)
+import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Hooks.ManageHelpers
 import XMonad.Util.Run
 import System.IO
+import qualified XMonad.StackSet as W
+
+--Define mod key
+modm = mod1Mask
 
 --myLayout = tiled ||| Mirror tiled ||| Full
 --where
@@ -15,19 +19,27 @@ import System.IO
     --delta = 5/100
 
 --Define workspaces names
-myWorkspaces = ["1:main","2:reference","3:output","4:misc","5:writing","6:output","7:reading","8:media","9:social"]
+myExtraWorkspaces = [(xK_0, "0:✍"), (xK_minus, "-:"), (xK_equal, "=:☜"), (xK_grave, "`:✉")]
+myWorkspaces = ["1:✎","2:✑","3:☝","4:⌨","5:✒","6:☞","7:reading","8:♫","9:☺"] ++ (map snd myExtraWorkspaces)
 
+
+-- Key bindings
+myKeys = [
+        ((modm, key), (windows $ W.greedyView ws)) | (key, ws) <- myExtraWorkspaces
+        ] ++ [
+         ((modm .|. shiftMask, key), (windows $ W.shift ws)) | (key, ws) <- myExtraWorkspaces
+        ]
 
 myConfig = defaultConfig
     { manageHook = ( isFullscreen --> doFullFloat ) <+> manageDocks <+> manageHook defaultConfig
     --, manageHook = manageDocks <+> manageHook defaultConfig --requires the installation of xmonad-contrib ? 
     , layoutHook = smartBorders (avoidStruts $ layoutHook defaultConfig)
-    --, terminal = "urxvtcd"
+    --, terminal = "urxvt"
     , borderWidth=1
     --, modMask = mod4Mask --sets mod key to windows button
     --, layoutHook = myLayout
     , workspaces = myWorkspaces
-    }
+    } `additionalKeys` myKeys
 
 -- The main function
 main = xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
