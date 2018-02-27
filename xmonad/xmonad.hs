@@ -19,8 +19,8 @@ modm = mod1Mask
     --delta = 5/100
 
 --Define workspaces names
-myExtraWorkspaces = [(xK_0, "0:✍"), (xK_minus, "-:"), (xK_equal, "=:☜"), (xK_grave, "`:✉")]
-myWorkspaces = ["1:✎","2:✑","3:☝","4:⌨","5:✒","6:☞","7:‖/","8:♫","9:☺"] ++ (map snd myExtraWorkspaces)
+myExtraWorkspaces = [(xK_0, "0:♫"), (xK_minus, "-:☺"), (xK_equal, "=:✉"), (xK_BackSpace, "<-:‖/"), (xK_grave, "`:time")]
+myWorkspaces = ["1:a1","2:a2","3:a3","4:b1","5:b2","6:b3","7:c1","8:c2","9:c3"] ++ (map snd myExtraWorkspaces)
 
 
 -- Key bindings
