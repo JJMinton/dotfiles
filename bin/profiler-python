@@ -1,1 +1,1 @@
-python -m cProfile -o $2 $1
+../scripts/profiler-python
