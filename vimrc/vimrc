@@ -5,10 +5,11 @@ source ~/dotfiles/vimrc/vimrc_beeps
 source ~/dotfiles/vimrc/vimrc_numbering
 "source ~/dotfiles/vimrc/vimrc_spell
 source ~/dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
+source ~/dotfiles/vimrc/vimrc_dotpy
 
 " no vi compat
 set nocompatible
-setlocal foldmethod=indent
+" setlocal foldmethod=indent
 
 " filetype func off
 filetype off
