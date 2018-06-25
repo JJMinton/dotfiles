@@ -1,12 +1,3 @@
-source ~/dotfiles/vimrc/vimrc_colors
-source ~/dotfiles/vimrc/vimrc_tabs
-source ~/dotfiles/vimrc/vimrc_arrows
-source ~/dotfiles/vimrc/vimrc_beeps
-source ~/dotfiles/vimrc/vimrc_numbering
-"source ~/dotfiles/vimrc/vimrc_spell
-source ~/dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
-source ~/dotfiles/vimrc/vimrc_dotpy
-
 " no vi compat
 set nocompatible
 " setlocal foldmethod=indent
@@ -45,4 +36,14 @@ let g:cdocstr = "class docstring (to change)"
 cabbrev q qa
 cabbrev x xa
 command W w
+
+source ~/dotfiles/vimrc/vimrc_colors
+source ~/dotfiles/vimrc/vimrc_tabs
+source ~/dotfiles/vimrc/vimrc_arrows
+source ~/dotfiles/vimrc/vimrc_beeps
+source ~/dotfiles/vimrc/vimrc_numbering
+"source ~/dotfiles/vimrc/vimrc_spell
+source ~/dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
+source ~/dotfiles/vimrc/vimrc_search
+source ~/dotfiles/vimrc/vimrc_dotpy
 
