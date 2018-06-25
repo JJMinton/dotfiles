@@ -179,4 +179,9 @@ mode "locking" {
 
 bindsym $mod+Escape mode "locking"
 
+#Auto placement
+assign [class="Signal"] -
+assign [class="Slack"] =
+
+#Run autolocking
 exec --no-startup-id xautolock -time 2 -detectsleep -locker lock -notify 10 -notifier "notify-send 'Locking'" -corners 0-00 -cornerdelay 100
