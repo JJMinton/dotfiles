@@ -180,8 +180,33 @@ mode "locking" {
 bindsym $mod+Escape mode "locking"
 
 #Auto placement
+default_orientation vertical
 assign [class="Signal"] -
 assign [class="Slack"] =
+assign [class="Spotify"] ~
+
+# Spotify
+bindcode $mod+71 exec "~/dotfiles/scripts/spotify/play_pause.sh"
+bindcode 172     exec "~/dotfiles/scripts/spotify/play_pause.sh"
+bindcode $mod+72 exec "~/dotfiles/scripts/spotify/next.sh"
+bindcode 171     exec "~/dotfiles/scripts/spotify/next.sh"
+bindcode $mod+70 exec "~/dotfiles/scripts/spotify/previous.sh"
+bindcode 173     exec "~/dotfiles/scripts/spotify/previous.sh"
+
+# Volume
+#
+
+# Brightness
+bindcode 232 exec "xbacklight - 5"
+bindcode $mod+95 exec "xbacklight - 5"
+bindcode 233 exec "xbacklight + 5"
+bindcode $mod+96 exec "xbacklight + 5"
 
 #Run autolocking
 exec --no-startup-id xautolock -time 2 -detectsleep -locker lock -notify 10 -notifier "notify-send 'Locking'" -corners 0-00 -cornerdelay 100
+
+#Autostart programs
+exec --no-startup-id i3-msg 'workspace ~; exec spotify'
+exec --no-startup-id i3-msg 'workspace -; exec signal-desktop'
+exec --no-startup-id i3-msg 'workspace =; exec slack'
+exec --no-startup-id i3-msg 'workspace 10; exec firefox'
