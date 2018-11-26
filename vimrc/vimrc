@@ -1,27 +1,25 @@
 " no vi compat
-set nocompatible
 " setlocal foldmethod=indent
 
-" filetype func off
+set nocompatible
 filetype off
-
 " initialize vundle
 set rtp+=~/.vim/bundle/Vundle.vim
-
 call vundle#begin()
-" start- all plugins below
+syntax off
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
-Plugin 'aperezdc/vim-template'
-Plugin 'davidhalter/jedi-vim'
+"Plugin 'vim-templates'
+"Plugin 'davidhalter/jedi-vim'
 "Plugin 'SirVer/ultisnips'
-Plugin 'andviro/flake8-vim'
+Plugin 'git://github.com/wikitopian/hardmode.git'
+Plugin 'surround.vim'
+Plugin 'ctrlp.vim'
+Plugin 'vim-flake8'
 
-" stop - all plugins above
+syntax on
 call vundle#end()
-
-" filetype func on
 filetype plugin indent on
 
 "lightline fix
@@ -33,9 +31,15 @@ let g:user = "jeremy-minton"
 let g:fdocstr = "function docstring (to change)"
 let g:cdocstr = "class docstring (to change)"
 
+" Ctrlp config
+let g:ctrlp_working_path_mode = 'r'
+
+" Hardmode config
+call HardMode()
+
 cabbrev q qa
 cabbrev x xa
-command W w
+command! W w
 
 source ~/dotfiles/vimrc/vimrc_colors
 source ~/dotfiles/vimrc/vimrc_tabs
@@ -47,4 +51,3 @@ source ~/dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
 source ~/dotfiles/vimrc/vimrc_search
 source ~/dotfiles/vimrc/vimrc_dotpy
 source ~/dotfiles/vimrc/vimrc_dotjs
-

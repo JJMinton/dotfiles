@@ -1,5 +1,1 @@
-call vundle#begin()
-Plugin 'andviro/flake8-vim'
-call vundle#end()
-
 autocmd BufEnter *.py set colorcolumn=80
