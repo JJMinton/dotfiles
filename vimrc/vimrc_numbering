@@ -1,2 +1,2 @@
-"Page numbering
-set relativenumber
+"Hybrid page numbering
+set nu rnu

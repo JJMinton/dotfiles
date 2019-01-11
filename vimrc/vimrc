@@ -13,10 +13,11 @@ Plugin 'itchyny/lightline.vim'
 "Plugin 'vim-templates'
 "Plugin 'davidhalter/jedi-vim'
 "Plugin 'SirVer/ultisnips'
-Plugin 'git://github.com/wikitopian/hardmode.git'
+"Plugin 'git://github.com/takac/vim-hardtime.git'
 Plugin 'surround.vim'
 Plugin 'ctrlp.vim'
 Plugin 'vim-flake8'
+Plugin 'fugitive.vim'
 
 syntax on
 call vundle#end()
@@ -35,8 +36,10 @@ let g:cdocstr = "class docstring (to change)"
 let g:ctrlp_working_path_mode = 'r'
 
 " Hardmode config
-call HardMode()
+let g:hardtime_default_on = 1
 
+" fugitive.vim config
+set diffopt+=vertical
 cabbrev q qa
 cabbrev x xa
 command! W w
