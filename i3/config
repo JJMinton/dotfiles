@@ -198,9 +198,9 @@ bindcode $mod+96 exec "xbacklight + 5"
 
 #### Background applications
 # Set background image
-exec --no-startup-id 'feh --randomize --bg-fill ~/.wallpapers/*'
+exec --no-startup-id "feh --randomize --bg-fill ~/.wallpapers/*"
 # Run compton for semi-transparent windows
-exec --no-startup-id 'compton --config ~/.config/i3/compton.conf -b'
+exec --no-startup-id "compton --config ~/.config/i3/compton.conf -b"
 
 # I3Bar
 # Start i3bar to display a workspace bar
@@ -216,13 +216,15 @@ exec --no-startup-id xautolock -time 2 -detectsleep -locker lock -notify 10 -not
 #### Program start and placement
 #Auto pl
 assign [class="Signal"] -
+assign [class="whatsapp"] -
 assign [class="Slack"] =
-assign [instance="(?i)spotify"] ~
+assign [class="gmail"] B
+assign [class="outlook"] B
+assign [class="outlookcal"] B
+assign [class="(?i)spotify"] ~
 
 #Autostart programs
-exec --no-startup-id i3-msg 'workspace ~; exec spotify'
 exec --no-startup-id i3-msg 'workspace -; exec signal-desktop'
-exec --no-startup-id i3-msg 'workspace -; exec firefox https://web.whatsapp.com/'
 exec --no-startup-id i3-msg 'workspace -; layout vertical'
 exec --no-startup-id i3-msg 'workspace =; exec slack'
 exec --no-startup-id i3-msg 'workspace 10; exec firefox'

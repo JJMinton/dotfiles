@@ -1,0 +1,13 @@
+[Install]
+WantedBy=graphical-session.target
+
+[Service]
+CPUQuota=150%
+MemoryMax=2G
+ExecStartPre=/bin/mkdir -p ${HOME}/.config/chromium_outlook
+ExecStart=/usr/bin/chromium-browser --app=https://outlook.office.com --class=outlook --user-data-dir=$HOME/.config/chromium_outlook
+
+[Unit]
+After=graphical-session-pre.target
+Description=Gmail
+PartOf=graphical-session.target

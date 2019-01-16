@@ -1,0 +1,13 @@
+[Install]
+WantedBy=graphical-session.target
+
+[Service]
+CPUQuota=150%
+MemoryMax=2G
+ExecStartPre=/bin/mkdir -p ${HOME}/.config/chromium_gmail
+ExecStart=/usr/bin/chromium-browser --app=https://mail.google.com --class=gmail --user-data-dir=$HOME/.config/chromium_gmail
+
+[Unit]
+After=graphical-session-pre.target
+Description=Gmail
+PartOf=graphical-session.target
