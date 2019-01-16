@@ -11,9 +11,9 @@ syntax off
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
 "Plugin 'vim-templates'
-"Plugin 'davidhalter/jedi-vim'
+Plugin 'davidhalter/jedi-vim'
 "Plugin 'SirVer/ultisnips'
-"Plugin 'git://github.com/takac/vim-hardtime.git'
+Plugin 'git://github.com/takac/vim-hardtime.git'
 Plugin 'surround.vim'
 Plugin 'ctrlp.vim'
 Plugin 'vim-flake8'
@@ -36,7 +36,7 @@ let g:cdocstr = "class docstring (to change)"
 let g:ctrlp_working_path_mode = 'r'
 
 " Hardmode config
-let g:hardtime_default_on = 1
+let g:hardtime_default_on = 0
 
 " fugitive.vim config
 set diffopt+=vertical
