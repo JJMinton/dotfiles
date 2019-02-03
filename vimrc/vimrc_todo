@@ -1,4 +1,4 @@
 " check off a todo item and time stamp it
 map gg ^rx: <Esc>:r! date +" [\%H:\%M]"<ENTER>kJA<Esc>$
 " create a new todo item
-map gt o _
+map gt o_
