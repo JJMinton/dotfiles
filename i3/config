@@ -219,12 +219,16 @@ assign [class="Signal"] -
 assign [class="whatsapp"] -
 assign [class="Slack"] =
 assign [class="gmail"] B
+assign [class="gcalendar"] B
 assign [class="outlook"] B
-assign [class="outlookcal"] B
+assign [class="outlookcalendar"] B
 assign [class="(?i)spotify"] ~
 
 #Autostart programs
 exec --no-startup-id i3-msg 'workspace -; exec signal-desktop'
+exec --no-startup-id i3-msg 'workspace -; exec systemctl --user start whatsapp'
 exec --no-startup-id i3-msg 'workspace -; layout vertical'
+exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start gmail'
+exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start gcalendar'
 exec --no-startup-id i3-msg 'workspace =; exec slack'
 exec --no-startup-id i3-msg 'workspace 10; exec firefox'
