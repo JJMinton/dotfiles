@@ -7,4 +7,6 @@
 #
 
 
-sudo openvpn --config '/home/jeremy.minton/.ssh/vpn/jeremy.minton-eigen.ovpn' --dh '/home/jeremy.minton/.ssh/vpn/dh2048.pem' --ca '/home/jeremy.minton/.ssh/vpn/ca.crt' --cert '/home/jeremy.minton/.ssh/vpn/jeremy.minton.crt' --key '/home/jeremy.minton/.ssh/vpn/jeremy.minton.key'
+# sudo openvpn --config '/home/jeremy.minton/.ssh/vpn/jeremy.minton-eigen.ovpn' --dh '/home/jeremy.minton/.ssh/vpn/dh2048.pem' --ca '/home/jeremy.minton/.ssh/vpn/ca.crt' --cert '/home/jeremy.minton/.ssh/vpn/jeremy.minton.crt' --key '/home/jeremy.minton/.ssh/vpn/jeremy.minton.key'
+
+sudo openvpn --config '/home/jeremy.minton/.ssh/vpn/client.ovpn'
