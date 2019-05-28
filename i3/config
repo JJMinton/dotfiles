@@ -200,6 +200,7 @@ bindcode $mod+96 exec "xbacklight + 5"
 # Set background image
 exec --no-startup-id "feh --randomize --bg-fill ~/.wallpapers/*"
 # Run compton for semi-transparent windows
+# requires `sudo apt install compton`
 exec --no-startup-id "compton --config ~/.config/i3/compton.conf -b"
 
 # I3Bar
