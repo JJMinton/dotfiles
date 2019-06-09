@@ -20,6 +20,9 @@ Plugin 'fugitive.vim'
 "Language Server
 Plugin 'git://github.com/autozimu/LanguageClient-neovim'
 
+"Additional colour schemes
+Plugin 'git://github.com/rafi/awesome-vim-colorschemes'
+
 call vundle#end()
 filetype plugin indent on
 
