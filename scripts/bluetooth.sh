@@ -5,4 +5,4 @@
 #
 # Distributed under terms of the MIT license.
 #
-echo 'connect \t\nquit' | bluetoothctl
+echo 'connect D0:\t\nquit' | bluetoothctl

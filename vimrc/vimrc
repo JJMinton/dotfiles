@@ -4,9 +4,8 @@
 set nocompatible
 filetype off
 " initialize vundle
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-syntax off
+set rtp+=~/.config/nvim/bundle/Vundle.vim
+call vundle#begin('~/.config/nvim/bundle')
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
@@ -16,10 +15,11 @@ Plugin 'davidhalter/jedi-vim'
 Plugin 'git://github.com/takac/vim-hardtime.git'
 Plugin 'surround.vim'
 Plugin 'ctrlp.vim'
-Plugin 'vim-flake8'
 Plugin 'fugitive.vim'
 
-syntax on
+"Language Server
+Plugin 'git://github.com/autozimu/LanguageClient-neovim'
+
 call vundle#end()
 filetype plugin indent on
 
@@ -52,6 +52,7 @@ source ~/dotfiles/vimrc/vimrc_numbering
 "source ~/dotfiles/vimrc/vimrc_spell
 source ~/dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
 source ~/dotfiles/vimrc/vimrc_search
-source ~/dotfiles/vimrc/vimrc_dotpy
+source ~/dotfiles/vimrc/vimrc_language_server
+autocmd BufEnter *.py source ~/dotfiles/vimrc/vimrc_dotpy
 source ~/dotfiles/vimrc/vimrc_dotjs
 source ~/dotfiles/vimrc/vimrc_todo

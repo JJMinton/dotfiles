@@ -1,1 +1,7 @@
-autocmd BufEnter *.py set colorcolumn=80
+set colorcolumn=88
+set colorcolumn=80
+
+" requires `sudo apt install silversearcher-ag`
+" https://github.com/ggreer/the_silver_searcher
+let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden --python -g ""'
+        

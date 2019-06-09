@@ -200,6 +200,7 @@ bindcode $mod+96 exec "xbacklight + 5"
 # Set background image
 exec --no-startup-id "feh --randomize --bg-fill ~/.wallpapers/*"
 # Run compton for semi-transparent windows
+# requires `sudo apt install compton`
 exec --no-startup-id "compton --config ~/.config/i3/compton.conf -b"
 
 # I3Bar
@@ -211,12 +212,14 @@ bar {
 }
 
 #Autolocking
+# requires `sudo apt install xautolock`
 exec --no-startup-id xautolock -time 2 -detectsleep -locker lock -notify 10 -notifier "notify-send 'Locking'" -corners 0-00 -cornerdelay 100
 
 #### Program start and placement
 #Auto pl
 assign [class="Signal"] -
 assign [class="whatsapp"] -
+assign [class="(?i)keybase"] -
 assign [class="Slack"] =
 assign [class="gmail"] B
 assign [class="gcalendar"] B
@@ -227,8 +230,14 @@ assign [class="(?i)spotify"] ~
 #Autostart programs
 exec --no-startup-id i3-msg 'workspace -; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace -; exec systemctl --user start whatsapp'
+exec --no-startup-id i3-msg 'workspace -; exec run_keybase'
 exec --no-startup-id i3-msg 'workspace -; layout vertical'
 exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start gmail'
 exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start gcalendar'
 exec --no-startup-id i3-msg 'workspace =; exec slack'
 exec --no-startup-id i3-msg 'workspace 10; exec firefox'
+
+exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start gmail'
+exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start gcalendar'
+exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start outlook'
+exec --no-startup-id i3-msg 'workspace B; exec systemctl --user start outlookcalendar'
