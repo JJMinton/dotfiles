@@ -1,7 +1,14 @@
-colorscheme OceanicNext
+colorscheme angr
 
-set background=dark " When set to "dark", Vim will try to use colors that look
+"set background=dark " When set to "dark", Vim will try to use colors that look
                     " good on a dark background. When set to "light", Vim will
                     " try to use colors that look good on a light background.
                     " Any other value is illegal.
 syntax on
+
+
+" Highlight the column/line containing the cursor
+set cursorcolumn
+hi CursorColumn ctermbg=darkgrey
+set cursorline
+hi CursorLine ctermbg=darkgrey cterm=none

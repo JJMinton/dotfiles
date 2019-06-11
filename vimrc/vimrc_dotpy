@@ -1,5 +1,4 @@
 set colorcolumn=88
-set colorcolumn=80
 
 " requires `sudo apt install silversearcher-ag`
 " https://github.com/ggreer/the_silver_searcher

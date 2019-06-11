@@ -12,16 +12,16 @@ Plugin 'itchyny/lightline.vim'
 "Plugin 'vim-templates'
 Plugin 'davidhalter/jedi-vim'
 "Plugin 'SirVer/ultisnips'
-Plugin 'git://github.com/takac/vim-hardtime.git'
+Plugin 'https://github.com/takac/vim-hardtime.git'
 Plugin 'surround.vim'
 Plugin 'ctrlp.vim'
 Plugin 'fugitive.vim'
 
 "Language Server
-Plugin 'git://github.com/autozimu/LanguageClient-neovim'
+Plugin 'https://github.com/autozimu/LanguageClient-neovim.git'
 
 "Additional colour schemes
-Plugin 'git://github.com/rafi/awesome-vim-colorschemes'
+Plugin 'https://github.com/rafi/awesome-vim-colorschemes.git'
 
 call vundle#end()
 filetype plugin indent on
