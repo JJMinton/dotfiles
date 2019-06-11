@@ -5,7 +5,7 @@ WantedBy=graphical-session.target
 CPUQuota=150%
 MemoryMax=2G
 ExecStartPre=/bin/mkdir -p ${HOME}/.config/chromium_gcalendar
-ExecStart=/usr/bin/chromium-browser --app=https://calendar.google.com --class=gcalendar --user-data-dir=$HOME/.config/chromium_gcalendar
+ExecStart=/usr/bin/chromium-browser --app=https://calendar.google.com --class=gcalendar --user-data-dir=${HOME}/.config/chromium_gcalendar
 
 [Unit]
 After=graphical-session-pre.target

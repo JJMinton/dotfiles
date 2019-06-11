@@ -5,7 +5,7 @@ WantedBy=graphical-session.target
 CPUQuota=50%
 MemoryMax=1G
 ExecStartPre=/bin/mkdir -p ${HOME}/.config/chromium_whatsapp
-ExecStart=/usr/bin/chromium-browser --app=https://web.whatsapp.com --class=whatsapp --user-data-dir=$HOME/.config/chromium_whatsapp
+ExecStart=/usr/bin/chromium-browser --app=https://web.whatsapp.com --class=whatsapp --user-data-dir=${HOME}/.config/chromium_whatsapp
 
 [Unit]
 After=graphical-session-pre.target

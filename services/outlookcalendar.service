@@ -5,7 +5,7 @@ WantedBy=graphical-session.target
 CPUQuota=150%
 MemoryMax=2G
 ExecStartPre=/bin/mkdir -p ${HOME}/.config/chromium_outlookcal
-ExecStart=/usr/bin/chromium-browser --app=https://outlook.office365.com/owa/?realm=eigentech.com&exsvurl=1&ll-cc=2057&modurl=1&path=/calendar/view/Week --class=outlookcal --user-data-dir=$HOME/.config/chromium_outlookcal
+ExecStart=/usr/bin/chromium-browser --app=https://outlook.office365.com/owa/?realm=eigentech.com&exsvurl=1&ll-cc=2057&modurl=1&path=/calendar/view/Week --class=outlookcal --user-data-dir=${HOME}/.config/chromium_outlookcal
 
 [Unit]
 After=graphical-session-pre.target
