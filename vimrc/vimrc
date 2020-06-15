@@ -9,13 +9,15 @@ call vundle#begin('~/.config/nvim/bundle')
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
-"Plugin 'vim-templates'
 Plugin 'davidhalter/jedi-vim'
-"Plugin 'SirVer/ultisnips'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+"Plugin 'vim-templates'
 Plugin 'https://github.com/takac/vim-hardtime.git'
 Plugin 'surround.vim'
 Plugin 'ctrlp.vim'
 Plugin 'fugitive.vim'
+Plugin 'easymotion/vim-easymotion'
 
 "Language Server
 Plugin 'https://github.com/autozimu/LanguageClient-neovim.git'
@@ -34,6 +36,10 @@ let g:email = "jeremy.minton@eigentech.com"
 let g:user = "jeremy-minton"
 let g:fdocstr = "function docstring (to change)"
 let g:cdocstr = "class docstring (to change)"
+
+" Easymtion key bindings
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
 
 " Ctrlp config
 let g:ctrlp_working_path_mode = 'r'
@@ -55,7 +61,8 @@ source ~/dotfiles/vimrc/vimrc_numbering
 "source ~/dotfiles/vimrc/vimrc_spell
 source ~/dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
 source ~/dotfiles/vimrc/vimrc_search
-source ~/dotfiles/vimrc/vimrc_language_server
-autocmd BufEnter *.py source ~/dotfiles/vimrc/vimrc_dotpy
-source ~/dotfiles/vimrc/vimrc_dotjs
 source ~/dotfiles/vimrc/vimrc_todo
+source ~/dotfiles/vimrc/vimrc_language_server
+source ~/dotfiles/vimrc/vimrc_ultisnips
+autocmd BufEnter *.py source ~/dotfiles/vimrc/vimrc_dotpy
+autocmd BufEnter *.js source ~/dotfiles/vimrc/vimrc_dotjs
