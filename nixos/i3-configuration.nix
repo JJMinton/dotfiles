@@ -2,13 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, callPackage, ... }: 
+{ config, pkgs, lib, callPackage, ... }: 
 
 {
 
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
+      # ./modules/xdg.nix
+      ./modules/alacritty.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -92,7 +94,7 @@
   environment.variables = {
     EDITOR = "${pkgs.neovim}/bin/nvim";
     VISUAL = "${pkgs.neovim}/bin/nvim";
-    TERMINAL = "${pkgs.alacritty}/bin/alacritty"; #envvar for i3
+    TERMINAL = "alacritty"; #envvar for i3  # TODO: refernece this from a packate; requires merging custom packages with nixpkgs
   };
 
   # For i3: https://nixos.wiki/wiki/I3
@@ -132,6 +134,10 @@
     autosuggestions.enable = false;
     enableCompletion = true;
   };
+  programs.alacritty = {
+    enable = true;
+    settings = builtins.readFile ../alacritty/alacritty.yaml;
+  };
 
   # List services that you want to enable:
   services.keybase.enable = true;
@@ -167,11 +173,9 @@
 
 
 # TODO:
-#  - terminal configuraiton
+#  - alacritty yaml configuraiton by default
 #  - clone and load other dotfiles
 #    - vim configuration
-#    - i3 configuration
-#  - derivations
 #  - messaging apps
 #  - keybase file system
 #  - i3 config to nixos config

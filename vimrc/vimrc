@@ -53,16 +53,16 @@ cabbrev q qa
 cabbrev x xa
 command! W w
 
-source ~/dotfiles/vimrc/vimrc_colors
-source ~/dotfiles/vimrc/vimrc_tabs
-source ~/dotfiles/vimrc/vimrc_arrows
-source ~/dotfiles/vimrc/vimrc_beeps
-source ~/dotfiles/vimrc/vimrc_numbering
-"source ~/dotfiles/vimrc/vimrc_spell
-source ~/dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
-source ~/dotfiles/vimrc/vimrc_search
-source ~/dotfiles/vimrc/vimrc_todo
-source ~/dotfiles/vimrc/vimrc_language_server
-source ~/dotfiles/vimrc/vimrc_ultisnips
-autocmd BufEnter *.py source ~/dotfiles/vimrc/vimrc_dotpy
-autocmd BufEnter *.js source ~/dotfiles/vimrc/vimrc_dotjs
+source ~/.dotfiles/vimrc/vimrc_colors
+source ~/.dotfiles/vimrc/vimrc_tabs
+source ~/.dotfiles/vimrc/vimrc_arrows
+source ~/.dotfiles/vimrc/vimrc_beeps
+source ~/.dotfiles/vimrc/vimrc_numbering
+"source ~/.dotfiles/vimrc/vimrc_spell
+source ~/.dotfiles/vimrc/vimrc_netrw "replacement for NERDTree
+source ~/.dotfiles/vimrc/vimrc_search
+source ~/.dotfiles/vimrc/vimrc_todo
+source ~/.dotfiles/vimrc/vimrc_language_server
+source ~/.dotfiles/vimrc/vimrc_ultisnips
+autocmd BufEnter *.py source ~/.dotfiles/vimrc/vimrc_dotpy
+autocmd BufEnter *.js source ~/.dotfiles/vimrc/vimrc_dotjs
