@@ -10,7 +10,8 @@
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
       # ./modules/xdg.nix
-      ./modules/alacritty.nix
+      # ./modules/alacritty.nix  # TODO: Pull this package/module out as a snippet
+      <home-manager/nixos>
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -21,7 +22,6 @@
   networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;
     
-
   # Set your time zone.
   time.timeZone = "Europe/London";
 
@@ -86,15 +86,15 @@
     description = "Jeremy Minton";
     extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
   };
+  home-manager.users.jeremy = import ./home_manager/home.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  nixpkgs.config.allowUnfree = true;
   environment.shellAliases = { ll = "ls -hal"; };
   environment.variables = {
     EDITOR = "${pkgs.neovim}/bin/nvim";
     VISUAL = "${pkgs.neovim}/bin/nvim";
-    TERMINAL = "alacritty"; #envvar for i3  # TODO: refernece this from a packate; requires merging custom packages with nixpkgs
+    TERMINAL = "alacritty"; #envvar for i3  # TODO: refernece this from a package; requires merging custom packages with nixpkgs
   };
 
   # For i3: https://nixos.wiki/wiki/I3
@@ -105,13 +105,8 @@
     docker
     firefox
     git
-    libreoffice
     neovim
     pavucontrol
-    signal-desktop
-    slack-dark
-    spotify
-    vscode
     wget
     zsh
   ];
@@ -129,25 +124,19 @@
   #   vimAlias = true;
   #   extraConfig = (builtins.readFile ~/.dotfiles/vimrc/vimrc);
   # };
-  programs.zsh = {
-    enable = true;
-    autosuggestions.enable = false;
-    enableCompletion = true;
-  };
-  programs.alacritty = {
-    enable = true;
-    settings = builtins.readFile ../alacritty/alacritty.yaml;
-  };
+  programs.ssh.startAgent = true;
+  programs.light.enable = true;
 
   # List services that you want to enable:
-  services.keybase.enable = true;
-  services.kbfs.enable = true;
+
+  services.gnome3.gnome-keyring.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
   # security.sudo.extraRules = [
   #   { groups = [ "sudo" ]; commands = [ "ALL" ]; };
   # ];
+  security.pam.services.lightdm.enableGnomeKeyring = true;
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
@@ -170,19 +159,3 @@
   virtualisation.docker.enable = true;
 
 }
-
-
-# TODO:
-#  - alacritty yaml configuraiton by default
-#  - clone and load other dotfiles
-#    - vim configuration
-#  - messaging apps
-#  - keybase file system
-#  - i3 config to nixos config
-#  - vim config to nixos config
-#  - firefox extensions config with nixos
-#  - system python & pip
-#  - system python alias to docker container?
-#  - screen brightness
-#  - redshift
-#  - screen locker
