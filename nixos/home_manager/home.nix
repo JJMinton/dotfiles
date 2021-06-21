@@ -3,6 +3,7 @@
     home.packages = with pkgs; [
         chromium
         docker-compose
+        discord
         keybase-gui
         libreoffice
         okular
