@@ -75,6 +75,8 @@
   # services.xserver.enable = true;
   # services.xserver.displayManager.gdm.enable = true;
   # services.xserver.desktopManager.gnome3.enable = true;
+
+  services.blueman.enable = true;
   
   # Enable CUPS to print documents.
   # services.printing.enable = true;
