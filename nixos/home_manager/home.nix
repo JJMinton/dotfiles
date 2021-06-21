@@ -65,6 +65,7 @@
     };
     programs.zsh = {
         enable = true;
+        defaultKeymap = "emacs";
         # autosuggestions.enable = false;
         enableCompletion = true;
         shellAliases = let
@@ -72,8 +73,8 @@
         in {
             ll = "ls -hal";
             ".." = "cd ..";
-            vim = ${nvim};
-            vi = ${nvim};
+            vim = nvim;
+            vi = nvim;
         };
     };
 
