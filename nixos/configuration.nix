@@ -2,6 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
+# Test during development with (activate but don't add to grub):
+# nixos-build test -I nixos-config=./configuration.nix
+# then deploy with (activate, add to grub and make default):
+# nixos-build switch -I nixos-config=./configuration.nix
+# Consider using -p to name the build
+
 { config, pkgs, lib, callPackage, ... }: 
 
 {
@@ -117,12 +123,6 @@
   # programs.gnupg.agent = {
   #   enable = true;
   #   enableSSHSupport = true;
-  # };
-  # programs.neovim = {
-  #   enable = true;
-  #   viAlias = true;
-  #   vimAlias = true;
-  #   extraConfig = (builtins.readFile ~/.dotfiles/vimrc/vimrc);
   # };
   programs.ssh.startAgent = true;
   programs.light.enable = true;

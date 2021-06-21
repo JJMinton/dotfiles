@@ -1,3 +1,4 @@
+# Build instructions in configuration.nix
 { pkgs, ... }: {
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
