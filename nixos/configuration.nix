@@ -114,8 +114,10 @@
     docker
     firefox
     git
+    lshw
     neovim
     pavucontrol
+    pciutils
     wget
     zsh
   ];
