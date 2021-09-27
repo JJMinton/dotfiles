@@ -5,6 +5,8 @@
         chromium
         docker-compose
         discord
+        imagemagick # for screenshot
+        inkscape
         keybase-gui
         libreoffice
         okular
