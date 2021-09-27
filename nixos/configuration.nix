@@ -3,9 +3,9 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 # Test during development with (activate but don't add to grub):
-# nixos-build test -I nixos-config=./configuration.nix
+# ```nixos-rebuild test -I nixos-config=./configuration.nix```
 # then deploy with (activate, add to grub and make default):
-# nixos-build switch -I nixos-config=./configuration.nix
+# ```nixos-rebuild switch -I nixos-config=./configuration.nix```
 # Consider using -p to name the build
 
 { config, pkgs, lib, callPackage, ... }: 
@@ -131,7 +131,7 @@
 
   # List services that you want to enable:
 
-  services.gnome3.gnome-keyring.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
