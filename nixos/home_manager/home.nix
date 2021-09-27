@@ -52,6 +52,8 @@
             };
         };
     };
+    programs.nix-index.enable = true;
+    programs.nix-index.enableZshIntegration = true;
     programs.vscode = {
         enable = true;
         extensions = with pkgs.vscode-extensions; [
