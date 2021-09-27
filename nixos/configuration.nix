@@ -30,7 +30,7 @@
   networking.networkmanager.enable = true;
     
   # Set your time zone.
-  time.timeZone = "Europe/London";
+  time.timeZone = "Pacific/Auckland";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
