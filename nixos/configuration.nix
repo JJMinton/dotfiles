@@ -16,6 +16,9 @@
     [
       # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
+      ./nvidia_gpu.nix
+      # ./modules/xdg.nix
+      # ./modules/alacritty.nix  # TODO: Pull this package/module out as a snippet
       <home-manager/nixos>
       ./computers/prime-h570-plus.nix
     ];
