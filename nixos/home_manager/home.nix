@@ -5,10 +5,13 @@
         chromium
         docker-compose
         discord
+        gnome.cheese
+        gnome.nautilus
         imagemagick # for screenshot
         inkscape
         keybase-gui
         libreoffice
+        libsForQt5.kdenlive
         okular
         slack-dark
         signal-desktop
@@ -87,6 +90,9 @@
     # Services config
     services.keybase.enable = true;
     services.kbfs.enable = true;
+
+    # services.dropbox.enable = true;
+    # services.dropbox.path = "${config.home.homeDirectory}/Dropbox";
 }
 
 # TODO:
