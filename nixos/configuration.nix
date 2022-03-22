@@ -30,7 +30,8 @@
   networking.networkmanager.enable = true;
     
   # Set your time zone.
-  time.timeZone = "Pacific/Auckland";
+  time.timeZone = "Europe/London";
+  services.localtime.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -77,6 +78,7 @@
   # services.xserver.displayManager.gdm.enable = true;
   # services.xserver.desktopManager.gnome3.enable = true;
 
+  hardware.bluetooth.enable = true;
   services.blueman.enable = true;
   
   # Enable CUPS to print documents.
@@ -131,6 +133,11 @@
   # };
   programs.ssh.startAgent = true;
   programs.light.enable = true;
+
+
+  nixpkgs.config.allowUnfree = true;
+  programs.steam.enable = true;
+
 
   # List services that you want to enable:
 

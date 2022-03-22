@@ -1,10 +1,12 @@
 # Build instructions in configuration.nix
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
+        awscli2
         chromium
-        docker-compose
+        darktable
         discord
+        docker-compose
         gnome.cheese
         gnome.nautilus
         imagemagick # for screenshot
@@ -13,6 +15,7 @@
         libreoffice
         libsForQt5.kdenlive
         okular
+        openvpn
         slack-dark
         signal-desktop
         spotify
@@ -20,16 +23,18 @@
         vscode
         zip
         zotero
+        xorg.xhost
     ];
 
     # Program config
-    programs.alacritty = {
-        enable = true;
-    };
+    programs.alacritty.enable = true;
     #TODO: use programs.alacritty.settings
     home.file.alacrittyConf = {
         source = ../../alacritty/alacritty.yaml;
         target = ".config/alacritty/alacritty.yml";
+    };
+    programs.i3status-rust = {
+        enable = true;
     };
     programs.firefox = {
         enable = true;
@@ -60,7 +65,6 @@
     programs.vscode = {
         enable = true;
         extensions = with pkgs.vscode-extensions; [
-            bbenoist.Nix
             vscodevim.vim
             # eamodio.gitlens
             # ms-vsliveshare.vsliveshare
@@ -74,7 +78,6 @@
     };
     programs.zsh = {
         enable = true;
-        defaultKeymap = "emacs";
         # autosuggestions.enable = false;
         enableCompletion = true;
         shellAliases = let
@@ -91,8 +94,8 @@
     services.keybase.enable = true;
     services.kbfs.enable = true;
 
-    # services.dropbox.enable = true;
-    # services.dropbox.path = "${config.home.homeDirectory}/Dropbox";
+    services.dropbox.enable = true;
+    services.dropbox.path = "${config.home.homeDirectory}/Dropbox";
 }
 
 # TODO:
