@@ -1,0 +1,23 @@
+"Tab specifications
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+"Hybrid page numbering
+set nu rnu
+
+"Colour scheme
+colorscheme angr
+syntax on
+" Highlight the column/line containing the cursor
+set cursorcolumn
+hi CursorColumn ctermbg=darkgrey
+set cursorline
+hi CursorLine ctermbg=darkgrey cterm=none
+
+"Disable arrow keys to break habits
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
