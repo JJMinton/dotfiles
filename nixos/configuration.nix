@@ -58,10 +58,10 @@
     layout = "gb";
     # Enable touchpad support (enabled default in most desktopManager).
     libinput.enable = true;
+    libinput.touchpad.disableWhileTyping = true;
 
     desktopManager.xterm.enable = false;
     displayManager.defaultSession = "none+i3";
-    displayManager.lightdm.enable = true;
     windowManager.i3 = {
       enable = true;
       configFile = ../i3/config;
@@ -72,6 +72,15 @@
         i3blocks #if you are planning on using i3blocks over i3status
      ];
     };
+    xrandrHeads = [
+      {
+        output = "eDP-1";
+        primary = true;
+        monitorConfig = ''
+          DisplaySize 309 174
+        '';
+      }
+    ];
   };
   # Enable the GNOME 3 Desktop Environment.
   # services.xserver.enable = true;
@@ -90,14 +99,29 @@
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.jeremy = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    home = "/home/jeremy";
-    description = "Jeremy Minton";
-    extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
+  users.users = {
+    jeremy = {
+      isNormalUser = true;
+      shell = pkgs.zsh;
+      home = "/home/jeremy";
+      description = "Jeremy Minton";
+      extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
+    };
+    guest = {
+      isNormalUser = true;
+      home = "/home/guest";
+      description = "Guest";
+    };
+    steam = {
+      isNormalUser = true;
+      home = "/home/steam";
+      description = "For playing games";
+      extraGroups = [ "sudo" ];
+    };
   };
+  home-manager.users.guest = import ./home_manager/guest.nix;
   home-manager.users.jeremy = import ./home_manager/home.nix;
+  home-manager.users.steam = import ./home_manager/steam.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -140,6 +164,11 @@
 
 
   # List services that you want to enable:
+
+  # Enable autorandr
+  services.autorandr.enable = true;
+  # TODO: add autorandr configurations
+  services.autorandr.defaultTarget = "horizontal";
 
   services.gnome.gnome-keyring.enable = true;
 
