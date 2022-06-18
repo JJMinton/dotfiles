@@ -15,6 +15,7 @@
         libreoffice
         libsForQt5.kdenlive
         meld  # diffing tool
+        ncdu  # disk usage explorer
         okular
         openvpn
         playerctl  # for media keys
@@ -22,6 +23,7 @@
         signal-desktop
         spotify
         tdesktop  # telegram
+        tldr  # manual
         unzip
         vscode
         zip
