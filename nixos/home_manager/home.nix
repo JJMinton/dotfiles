@@ -9,6 +9,7 @@
         docker-compose
         gnome.cheese
         gnome.nautilus
+        i3lock  # for screen lock
         imagemagick  # for screenshot
         inkscape
         keybase-gui
@@ -16,6 +17,7 @@
         libsForQt5.kdenlive
         meld  # diffing tool
         ncdu  # disk usage explorer
+        notify-osd
         okular
         openvpn
         playerctl  # for media keys
@@ -28,20 +30,65 @@
         vscode
         zip
         zotero
+        xclip  # clipboard CLI command
         xorg.xhost
     ];
-    home.file.alacrittyConf = {
-        source = ../../alacritty/alacritty.yaml;
-        target = ".config/alacritty/alacritty.yml";
-    };
 
     # Program config
-    programs.alacritty.enable = true;
-    #TODO: use programs.alacritty.settings
+    programs.alacritty = {
+        enable = true;
+        settings = {
+            env.TERM = "linux";
+            font.size = 6.0;
+            colors = {# (Trim-yer-beard)
+            # Default colors
+                primary = {
+                    background = "0x191716";
+                    foreground = "0xdaba8b";
+                };
+                # Normal colors
+                normal = {
+                    black =   "0x0f0e0d";
+                    red =     "0x845336";
+                    green =   "0x57553c";
+                    yellow =  "0xa17e3e";
+                    blue =    "0x43454f";
+                    magenta = "0x604848";
+                    cyan =    "0x5c6652";
+                    white =   "0xa18b62";
+                };
+                # Bright colors
+                bright = {
+                    black =   "0x383332";
+                    red =     "0x8c4f4a";
+                    green =   "0x898471";
+                    yellow =  "0xc8b491";
+                    blue =    "0x65788f";
+                    magenta = "0x755e4a";
+                    cyan =    "0x718062";
+                    white =   "0xbc9d66";
+                };
+            };
+            window.opacity = 0.9;
+            key_bindings = [
+                {
+                    key = "C";
+                    mods = "Control|Shift";
+                    action = "Copy";
+                }
+                {
+                    key = "Insert";
+                    mods = "Shift";
+                    action = "PasteSelection";
+                }
+            ];
+        };
+    };
+
     programs.broot = {
         enable = true;
         enableZshIntegration = true;
-        verbs = [
+        settings.verbs = [
         {
             execution = "$EDITOR {directory}/{subpath}";
             invocation = "create {subpath}";
@@ -131,12 +178,14 @@
             # vscode-pdf
             # ryu1kn.partial-diff
             # rubbersheep.gi
+            # ace jumper
         ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {
                 name = "vscode-remote-extensionpack";
                 publisher = "ms-vscode-remote";
                 version = "0.21.0";
                 sha256 = "14l8h84kvnkbqwmw875qa6y25hhxvx1dsg0g07gdl6n8cv5kvy2g";
+                # TODO: lib.fakeSha256  # Should print hash on failure
             }
             {
                 name = "vsliveshare";
@@ -169,11 +218,13 @@
         enableCompletion = true;
         shellAliases = let
             nvim = "${pkgs.neovim}/bin/nvim";
+            broot = "${pkgs.broot}/bin/broot";
         in {
             ll = "ls -hal";
             ".." = "cd ..";
             vim = nvim;
             vi = nvim;
+            notes = "broot ${config.home.homeDirectory}/repos/dotfiles/notes";
         };
     };
 
@@ -181,10 +232,33 @@
     services.keybase.enable = true;
     services.kbfs.enable = true;
 
+
+    services.picom = {
+        enable = true;
+        fade = true;
+        inactiveOpacity = 0.8;
+    };
+    services.random-background = {
+        enable = true;
+        imageDirectory = "${config.home.homeDirectory}/Dropbox/Pictures/backgrounds";
+    };
+    services.screen-locker = {
+        enable = true;
+        lockCmd = "${pkgs.i3lock}/bin/i3lock -n -c 000000";
+    };
+
     services.dropbox.enable = true;
     services.dropbox.path = "${config.home.homeDirectory}/Dropbox";
 
     services.playerctld.enable = true;  # to control media players with hotkeys
+
+    # xdg.mimeApps.enable = true;
+    # xdg.mimeApps.defaultApplications = {
+    #     "inode/directory" = "nautilus.desktop";
+    #     "application/pdf" = "firefox.desktop";
+    # };
+
+    home.stateVersion = "20.09";
 }
 
 # TODO:
