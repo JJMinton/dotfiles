@@ -37,8 +37,9 @@
   networking.networkmanager.enable = true;
     
   # Set your time zone.
+  # time.timeZone = "Europe/Paris";
   time.timeZone = "Europe/London";
-  services.localtime.enable = true;
+  # services.localtimed.enable = true;  # Doesn't seem to work
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -69,6 +70,7 @@
 
     desktopManager.xterm.enable = false;
     displayManager.defaultSession = "none+i3";
+    displayManager.lightdm.enable = true;
     windowManager.i3 = {
       enable = true;
       configFile = ../i3/config;
@@ -79,6 +81,7 @@
         i3blocks #if you are planning on using i3blocks over i3status
      ];
     };
+    dpi = 80;  # Not sure this helps much (changes some stuff on screen size.)
     xrandrHeads = [
       {
         output = "eDP-1";
@@ -126,7 +129,7 @@
       extraGroups = [ "sudo" ];
     };
   };
-  home-manager.users.guest = import ./home_manager/guest.nix;
+  # home-manager.users.guest = import ./home_manager/guest.nix;
   home-manager.users.jeremy = import ./home_manager/home.nix;
   home-manager.users.steam = import ./home_manager/steam.nix;
 
@@ -162,6 +165,7 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+  programs.zsh.enable = true;
   programs.ssh.startAgent = true;
   programs.light.enable = true;
 

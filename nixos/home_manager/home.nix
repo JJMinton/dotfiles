@@ -7,6 +7,7 @@
         darktable
         discord
         docker-compose
+        feh
         gnome.cheese
         gnome.nautilus
         i3lock  # for screen lock
@@ -18,6 +19,7 @@
         meld  # diffing tool
         ncdu  # disk usage explorer
         notify-osd
+        nufraw-thumbnailer  # raw thumbnailer
         okular
         openvpn
         playerctl  # for media keys
@@ -26,7 +28,10 @@
         spotify
         tdesktop  # telegram
         tldr  # manual
+        transmission  # torrent
+        transmission-remote-gtk
         unzip
+        vlc  # media player
         vscode
         zip
         zotero
@@ -123,15 +128,6 @@
     };
     programs.firefox = {
         enable = true;
-        extensions = [
-            # https-everywhere  # Does this require NUR?
-            # ublock
-            # facebook container
-            # multi-account container
-            # lastpass
-            # vimvixen
-            # zotero
-        ];
         profiles.default = {
             id=0;
             isDefault=true;
@@ -143,6 +139,15 @@
                 "distribution.searchplugins.defaultLocale" = "en-GB";
                 "general.useragent.locale" = "en-GB";
             };
+            extensions = [
+                # https-everywhere  # Does this require NUR?
+                # ublock
+                # facebook container
+                # multi-account container
+                # lastpass
+                # vimvixen
+                # zotero
+            ];
         };
     };
     programs.git = {
@@ -171,6 +176,10 @@
 
     programs.nix-index.enable = true;
     programs.nix-index.enableZshIntegration = true;
+    programs.ssh = {
+        enable = true;
+        includes = ["${config.home.homeDirectory}/.ssh/*.config"];
+    };
     programs.vscode = {
         enable = true;
         extensions = with pkgs.vscode-extensions; [
@@ -247,16 +256,83 @@
         lockCmd = "${pkgs.i3lock}/bin/i3lock -n -c 000000";
     };
 
-    services.dropbox.enable = true;
-    services.dropbox.path = "${config.home.homeDirectory}/Dropbox";
+    services.dropbox = {
+        enable = true;
+        path = "${config.home.homeDirectory}/Dropbox";
+    };
 
     services.playerctld.enable = true;  # to control media players with hotkeys
 
-    # xdg.mimeApps.enable = true;
-    # xdg.mimeApps.defaultApplications = {
-    #     "inode/directory" = "nautilus.desktop";
-    #     "application/pdf" = "firefox.desktop";
-    # };
+    xdg = let 
+        filemanager    = "nautilus";
+        torrent     = "transmission";
+        browswer    = "firefox";
+    in {
+        enable = true;
+        desktopEntries = rec {
+            "nautilus" = {
+                name        = "Nautilus file manager";
+                genericName = "File Manager";
+                exec        = "${pkgs.gnome.nautilus}/bin/nautilus %U";
+                terminal    = false;
+                categories  = [ "Utility" "FileTools" "FileManager" ];
+                mimeType    = [ "inode/directory" ];
+            };
+            "firefox" = {
+                name        = "Firefox web browser";
+                genericName = "Web browser";
+                exec        = "${pkgs.firefox}/bin/firefox %U";
+                terminal    = false;
+                categories  = [ "Network" "WebBrowser" ];
+                mimeType    = [
+                    "x-scheme-handler/about"
+                    "x-scheme-handler/unknown"
+                    "x-scheme-handler/http"
+                    "x-scheme-handler/https"
+                    "image/svg+xml"
+                ];
+            };
+            "torrent" = {
+                name       = "Transmission torrent";
+                genericName = "Torrent client";
+                exec        = "${pkgs.transmission-remote-gtk}/bin/transmission-remote-gtk %U";
+                terminal    = false;
+                categories  = [ "Network" ];
+                mimeType    = [
+                    "application/x-bittorrent"
+                    "x-scheme-handler/magnet"
+                ];
+            };
+        };
+        mime.enable = true;
+        mimeApps.enable = true;
+        mimeApps.defaultApplications = {
+            "inode/directory"                   = "${filemanager}.desktop";
+            "text/html"                         = "${browswer}.desktop";
+            "x-scheme-handler/http"             = "${browswer}.desktop";
+            "x-scheme-handler/https"            = "${browswer}.desktop";
+            "x-scheme-handler/about"            = "${browswer}.desktop";
+            "x-scheme-handler/unknown"          = "${browswer}.desktop";
+            # "image/jpeg"                        = "${feh}.desktop";
+            # "image/bmp"                         = "${feh}.desktop";
+            # "image/png"                         = "${feh}.desktop";
+            # "image/tiff"                        = "${feh}.desktop";
+            # "image/x-icon"                      = "${feh}.desktop";
+            # "image/x-xpixmap"                   = "${feh}.desktop";
+            # "image/x-xbitmap"                   = "${feh}.desktop";
+            # "application/javascript"            = "${vscode}.desktop";
+            # "application/json"                  = "${vscode}.desktop";
+            # "application/x-bzip-compressed-tar" = "${vscode}.desktop";
+            # "application/x-compressed-tar"      = "${vscode}.desktop";
+            # "application/x-shellscript"         = "${vscode}.desktop";
+            # "application/zip"                   = "${vscode}.desktop";
+            # "text/english"                      = "${vscode}.desktop";
+            # "text/plain"                        = "${vscode}.desktop";
+            # "text/rust"                         = "${vscode}.desktop";
+            "application/x-bittorrent"          = "${torrent}.desktop";
+            "x-scheme-handler/magnet"           = "${torrent}.desktop";
+        };
+    };
 
     home.stateVersion = "20.09";
 }
@@ -273,7 +349,6 @@
 #  - pycharm
 #  - programs.light (run without sudo?)
 #  - redshift
-#  - screen locker
 #  - set wm by user?
 
 #  - setup custom mergetool

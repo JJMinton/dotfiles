@@ -16,24 +16,11 @@
 
     # Program config
     programs.alacritty.enable = true;
-    #TODO: use programs.alacritty.settings
-    home.file.alacrittyConf = {
-        source = ../../alacritty/alacritty.yaml;
-        target = ".config/alacritty/alacritty.yml";
-    };
     programs.i3status-rust = {
         enable = true;
     };
     programs.firefox = {
         enable = true;
-        extensions = [
-            # https-everywhere  # Does this require NUR?
-            # ublock
-            # facebook container
-            # multi-account container
-            # lastpass
-            # vimvixen
-        ];
         profiles.default = {
             id=0;
             isDefault=true;

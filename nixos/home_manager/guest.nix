@@ -29,11 +29,6 @@
 
     # Program config
     programs.alacritty.enable = true;
-    #TODO: use programs.alacritty.settings
-    home.file.alacrittyConf = {
-        source = ../../alacritty/alacritty.yaml;
-        target = ".config/alacritty/alacritty.yml";
-    };
     programs.firefox = {
         enable = true;
         extensions = [
