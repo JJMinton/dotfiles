@@ -178,7 +178,7 @@
     programs.nix-index.enableZshIntegration = true;
     programs.ssh = {
         enable = true;
-        includes = ["${config.home.homeDirectory}/.ssh/*.config"];
+        includes = ["${config.home.homeDirectory}/.ssh/*.config" "${config.home.homeDirectory}/.ssh/*/*.config"];
     };
     programs.vscode = {
         enable = true;
