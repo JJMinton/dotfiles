@@ -183,36 +183,26 @@
     programs.vscode = {
         enable = true;
         extensions = with pkgs.vscode-extensions; [
+            # available packages:
+            # https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/extensions/default.nix
             vscodevim.vim
-            # vscode-pdf
-            # ryu1kn.partial-diff
+            eamodio.gitlens
+            ms-vsliveshare.vsliveshare
+            foam.foam-vscode
+            ms-python.python
+            ms-toolsai.jupyter
+            tomoki1207.pdf
+            ryu1kn.partial-diff
             # rubbersheep.gi
             # ace jumper
         ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+            # Script to get entries for installed extensions:
+            # https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/extensions/update_installed_exts.sh
             {
                 name = "vscode-remote-extensionpack";
                 publisher = "ms-vscode-remote";
-                version = "0.21.0";
-                sha256 = "14l8h84kvnkbqwmw875qa6y25hhxvx1dsg0g07gdl6n8cv5kvy2g";
-                # TODO: lib.fakeSha256  # Should print hash on failure
-            }
-            {
-                name = "vsliveshare";
-                publisher = "ms-vsliveshare";
-                version = "1.0.5449";
-                sha256 = "1i7qn2v0s21pqfdrs9g9cz3f2ydxq763vlfxvp98x38x65zmd920";
-            }
-            {
-                name = "python";
-                publisher = "ms-python";
-                version = "2022.3.10811002";
-                sha256 = "0fmfm2w7xam1jfgrm4nxaiq0w8qwyx51gmw1yd4xfnvh2vdrli1a";
-            }
-            {
-                name = "gitlens";
-                publisher = "eamodio";
-                version = "12.0.5";
-                sha256 = "0zfawv9nn88x8m30h7ryax0c7p68najl23a51r88a70hqppzxshw";
+                version = "0.24.0";
+                sha256 = "0sha4l16x4nn3pxm2g6mxlvm7dz56ry2y3ii4b1s9ilckid0kzpa";
             }
         ];
         # user = "${config.user}";
