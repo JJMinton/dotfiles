@@ -14,46 +14,19 @@
 
   imports =
     [
-      # optimised hardware config from https://github.com/NixOS/nixos-hardware
-      <nixos-hardware/asus/zephyrus/ga401>
       # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-      # ./modules/xdg.nix
-      # ./modules/alacritty.nix  # TODO: Pull this package/module out as a snippet
       <home-manager/nixos>
+      ./computers/zephyrus.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi = {
-    canTouchEfiVariables = true;
-    efiSysMountPoint = "/boot/efi";
-  };
   boot.loader.grub = {
     configurationLimit = 3;
     efiSupport = true;
     device = "nodev";
   };
 
-  # Temperature management
-  services.auto-cpufreq.enable = true;
-
-  # GPU configuration
-  hardware.nvidia = { 
-    package = config.boot.kernelPackages.nvidiaPackages.latest; 
-    prime = { 
-      offload = { 
-        enable = true; 
-        enableOffloadCmd = true; 
-      }; 
-    }; 
-    powerManagement = { 
-      enable = true; 
-      finegrained = true; 
-    }; 
-    nvidiaPersistenced = true; 
-    nvidiaSettings = true; 
-  };
 
   # networking.hostName = "nixos"; # Define your hostname.
   networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
@@ -84,7 +57,6 @@
   # Enable the i3 desktop environment.
   services.xserver = {
     enable = true;
-     videoDrivers = ["nvidia"];
 
     # Keyboard layout
     layout = "gb";
@@ -232,6 +204,8 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.09"; # Did you read the comment?
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+  };
 
 }
