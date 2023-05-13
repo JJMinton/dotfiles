@@ -43,7 +43,6 @@
     programs.alacritty = {
         enable = true;
         settings = {
-            env.TERM = "linux";
             font.size = 6.0;
             colors = {# (Trim-yer-beard)
             # Default colors
@@ -76,16 +75,13 @@
             };
             window.opacity = 0.9;
             key_bindings = [
-                {
-                    key = "C";
-                    mods = "Control|Shift";
-                    action = "Copy";
-                }
-                {
-                    key = "Insert";
-                    mods = "Shift";
-                    action = "PasteSelection";
-                }
+                { key = "C"; mods = "Control|Shift"; action = "Copy"; }
+                { key = "V"; mods = "Control|Shift"; action = "PasteSelection"; }
+                { key = "V"; mods = "Control"; action = "Paste"; }
+                { key = "Insert"; mods = "Shift"; action = "PasteSelection"; }
+                { key = "Return"; mods = "Control|Shift"; action = "SpawnNewInstance"; }
+                { key = "Left"; mods = "Control"; chars = "\\eb"; }
+                { key = "Right"; mods = "Control"; chars = "\\ef"; }
             ];
         };
     };
