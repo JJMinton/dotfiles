@@ -58,8 +58,6 @@
   services.xserver = {
     enable = true;
 
-    # Keyboard layout
-    layout = "gb";
     # Enable touchpad support (enabled default in most desktopManager).
     libinput.enable = true;
     libinput.touchpad.disableWhileTyping = true;
@@ -78,15 +76,6 @@
      ];
     };
     dpi = 80;  # Not sure this helps much (changes some stuff on screen size.)
-    xrandrHeads = [
-      {
-        output = "eDP-1";
-        primary = true;
-        monitorConfig = ''
-          DisplaySize 309 174
-        '';
-      }
-    ];
   };
   # Enable the GNOME 3 Desktop Environment.
   # services.xserver.enable = true;
