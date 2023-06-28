@@ -228,15 +228,21 @@
         };
     };
 
-    # Services config
+    # Services
+
+    ## remote file systems
     services.keybase.enable = true;
     services.kbfs.enable = true;
+    services.dropbox = {
+        enable = true;
+        path = "${config.home.homeDirectory}/Dropbox";
+    };
 
-
+    ## Visuals
     services.picom = {
         enable = true;
         fade = true;
-        inactiveOpacity = 0.8;
+        inactiveOpacity = 0.9;
     };
     services.random-background = {
         enable = true;
@@ -247,13 +253,10 @@
         lockCmd = "${pkgs.i3lock}/bin/i3lock -n -c 000000";
     };
 
-    services.dropbox = {
-        enable = true;
-        path = "${config.home.homeDirectory}/Dropbox";
-    };
-
+    ## Hotkeys
     services.playerctld.enable = true;  # to control media players with hotkeys
 
+    ## File type associations
     xdg = let 
         filemanager    = "nautilus";
         torrent     = "transmission";
