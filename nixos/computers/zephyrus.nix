@@ -36,7 +36,22 @@
 
   networking.interfaces.wlp2s0.useDHCP = true;
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver = {
+    videoDrivers = ["nvidia"];
+    # Keyboard layout
+    layout = lib.mkDefault "gb";
+
+    # Screen size
+    xrandrHeads = [
+      {
+        output = "eDP-1";
+        primary = true;
+        monitorConfig = ''
+          DisplaySize 309 174
+        '';
+      }
+    ];
+  };
   virtualisation.docker.enableNvidia = true;
 
 }
