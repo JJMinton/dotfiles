@@ -218,6 +218,7 @@ assign [class="Signal"] -
 assign [class="whatsapp"] -
 assign [class="(?i)keybase"] -
 assign [class="Slack"] =
+assign [class="discord"] =
 assign [class="gmail"] B
 assign [class="gcalendar"] B
 assign [class="outlook"] B
@@ -228,6 +229,5 @@ assign [class="(?i)spotify"] ~
 exec --no-startup-id i3-msg 'workspace -; exec signal-desktop'
 exec --no-startup-id i3-msg 'workspace -; exec keybase-gui'
 exec --no-startup-id i3-msg 'workspace -; layout splitv'
-exec --no-startup-id i3-msg 'workspace =; exec slack'
 
 exec --no-startup-id i3-msg 'workspace 10; exec firefox'
