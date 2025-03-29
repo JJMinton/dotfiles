@@ -53,17 +53,19 @@
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   # };
+  # Enable touchpad support (enabled default in most desktopManager).
+  services.libinput = {
+    enable = true;
+    touchpad.disableWhileTyping = true;
+  };
+  
+  services.displayManager.defaultSession = "none+i3";
 
   # Enable the i3 desktop environment.
   services.xserver = {
     enable = true;
 
-    # Enable touchpad support (enabled default in most desktopManager).
-    libinput.enable = true;
-    libinput.touchpad.disableWhileTyping = true;
-
     desktopManager.xterm.enable = false;
-    displayManager.defaultSession = "none+i3";
     displayManager.lightdm.enable = true;
     windowManager.i3 = {
       enable = true;
@@ -89,34 +91,33 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
   hardware.pulseaudio.enable = true;
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users = {
-    jeremy = {
-      isNormalUser = true;
-      shell = pkgs.zsh;
-      home = "/home/jeremy";
-      description = "Jeremy Minton";
-      extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
-    };
-    guest = {
-      isNormalUser = true;
-      home = "/home/guest";
-      description = "Guest";
-    };
-    steam = {
-      isNormalUser = true;
-      home = "/home/steam";
-      description = "For playing games";
-      extraGroups = [ "sudo" ];
-    };
+  users.users.jeremy = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    home = "/home/jeremy";
+    description = "Jeremy Minton";
+    extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
   };
-  # home-manager.users.guest = import ./home_manager/guest.nix;
   home-manager.users.jeremy = import ./home_manager/home.nix;
-  home-manager.users.steam = import ./home_manager/steam.nix;
+
+  # users.users.guest = {
+  #   isNormalUser = true;
+  #   home = "/home/guest";
+  #   description = "Guest";
+  # };
+  # # home-manager.users.guest = import ./home_manager/guest.nix;
+
+  # users.users.steam = {
+  #   isNormalUser = true;
+  #   home = "/home/steam";
+  #   description = "For playing games";
+  #   extraGroups = [ "sudo" ];
+  # };
+  # home-manager.users.steam = import ./home_manager/steam.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

@@ -4,30 +4,34 @@
     home.packages = with pkgs; [
         awscli2
         chromium
+        # cura # 3d printing slicer # https://github.com/NixOS/nixpkgs/issues/186570
         darktable
         discord
         docker-compose
-        feh
-        gnome.cheese
-        gnome.nautilus
+        # feh
+        cheese  # take images etc. from webcam
+        nautilus
         imagemagick  # for screenshot
         inkscape
         keybase-gui
         libreoffice
         libsForQt5.kdenlive
+        maestral
+        maestral-gui  # alternative dropbox client
         meld  # diffing tool
         ncdu  # disk usage explorer
         notify-osd
         nufraw-thumbnailer  # raw thumbnailer
-        okular
+        kdePackages.okular
         openvpn
         playerctl  # for media keys
-        slack-dark
+        slack
         signal-desktop
         spotify
         tdesktop  # telegram
+        teams-for-linux  # Microsoft teams
         tldr  # manual
-        transmission  # torrent
+        transmission_4  # torrent
         transmission-remote-gtk
         unzip
         vlc  # media player
@@ -79,14 +83,16 @@
                 };
             };
             window.opacity = 0.9;
-            key_bindings = [
+            keyboard.bindings = [
                 { key = "C"; mods = "Control|Shift"; action = "Copy"; }
                 { key = "V"; mods = "Control|Shift"; action = "PasteSelection"; }
                 { key = "V"; mods = "Control"; action = "Paste"; }
                 { key = "Insert"; mods = "Shift"; action = "PasteSelection"; }
                 { key = "Return"; mods = "Control|Shift"; action = "SpawnNewInstance"; }
-                { key = "Left"; mods = "Control"; chars = "\\eb"; }
-                { key = "Right"; mods = "Control"; chars = "\\ef"; }
+                # { key = "Left"; mods = "Control"; chars = "\\eb"; }
+                # { key = "Right"; mods = "Control"; chars = "\\ef"; }
+                # { key = "Home"; action = "First"; }
+                # { key = "End"; action = "Last"; }
             ];
         };
     };
@@ -146,7 +152,7 @@
                 # facebook container
                 # multi-account container
                 # lastpass
-                # vimvixen
+                # vimium
                 # zotero
             ];
         };
@@ -173,6 +179,7 @@
             pull.rebase = "false";
             credential.helper = "libsecret";
         };
+        lfs.enable = true;
     };
 
     programs.nix-index.enable = true;
@@ -194,6 +201,7 @@
             ms-toolsai.jupyter
             tomoki1207.pdf
             ryu1kn.partial-diff
+            github.copilot
             # rubbersheep.gi
             # ace jumper
         ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
@@ -229,32 +237,39 @@
     };
 
     # Services
+    services = {
+        ## remote file systems
+        keybase.enable = true;
+        # keybase file system
+        kbfs = {  # TODO: check this is working correctly
+            enable = true;
+            mountPoint = "${config.home.homeDirectory}/keybase";
+        };
 
-    ## remote file systems
-    services.keybase.enable = true;
-    services.kbfs.enable = true;
-    services.dropbox = {
-        enable = true;
-        path = "${config.home.homeDirectory}/Dropbox";
+        ## Visuals
+        picom = {
+            enable = true;
+            fade = true;
+            inactiveOpacity = 0.9;
+        };
+        random-background = {
+            enable = true;
+            imageDirectory = "${config.home.homeDirectory}/Dropbox/Pictures/backgrounds";
+        };
+        screen-locker = {
+            enable = true;
+            lockCmd = "${pkgs.i3lock}/bin/i3lock -n -c 000000";
+        };
+
+        ## Hotkeys
+        playerctld.enable = true;  # to control media players with hotkeys
+
+    };
+    programs.autorandr.hooks = {
+        postswitch."change-background" = "systemctl --user start random-background";
     };
 
-    ## Visuals
-    services.picom = {
-        enable = true;
-        fade = true;
-        inactiveOpacity = 0.9;
-    };
-    services.random-background = {
-        enable = true;
-        imageDirectory = "${config.home.homeDirectory}/Dropbox/Pictures/backgrounds";
-    };
-    services.screen-locker = {
-        enable = true;
-        lockCmd = "${pkgs.i3lock}/bin/i3lock -n -c 000000";
-    };
 
-    ## Hotkeys
-    services.playerctld.enable = true;  # to control media players with hotkeys
 
     ## File type associations
     xdg = let 
@@ -267,7 +282,7 @@
             "nautilus" = {
                 name        = "Nautilus file manager";
                 genericName = "File Manager";
-                exec        = "${pkgs.gnome.nautilus}/bin/nautilus %U";
+                exec        = "${pkgs.nautilus}/bin/nautilus %U";
                 terminal    = false;
                 categories  = [ "Utility" "FileTools" "FileManager" ];
                 mimeType    = [ "inode/directory" ];
@@ -344,7 +359,8 @@
 #  - programs.light (run without sudo?)
 #  - redshift
 #  - set wm by user?
+#  - setup devpi as service
 
 #  - setup custom mergetool
 #  - vscode git-diff-and-merge-tool extension
-#  - autorandr
+#  - autorandr - automatically change when screen plugged in
