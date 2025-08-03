@@ -17,7 +17,7 @@
       # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
       <home-manager/nixos>
-      ./computers/zephyrus.nix
+      ./computers/prime-h570-plus.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -75,6 +75,7 @@
         i3status # gives you the default i3 status bar
         i3lock #default i3 screen locker
         i3blocks #if you are planning on using i3blocks over i3status
+        xautolock
      ];
     };
     dpi = 80;  # Not sure this helps much (changes some stuff on screen size.)
@@ -91,7 +92,7 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = false;
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.

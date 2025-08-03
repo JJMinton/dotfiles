@@ -343,7 +343,7 @@
         };
     };
 
-    home.stateVersion = "20.09";
+    home.stateVersion = "24.11";
 }
 
 # TODO:
