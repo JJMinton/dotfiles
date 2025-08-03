@@ -241,7 +241,7 @@
         ## remote file systems
         keybase.enable = true;
         # keybase file system
-        kbfs = {  # TODO: check this is working correctly
+        kbfs = {  # TODO: this isn't working; fix it
             enable = true;
             mountPoint = "${config.home.homeDirectory}/keybase";
         };
@@ -275,7 +275,7 @@
     xdg = let 
         filemanager    = "nautilus";
         torrent     = "transmission";
-        browswer    = "firefox";
+        browser    = "firefox";
     in {
         enable = true;
         desktopEntries = rec {
@@ -317,11 +317,11 @@
         mimeApps.enable = true;
         mimeApps.defaultApplications = {
             "inode/directory"                   = "${filemanager}.desktop";
-            "text/html"                         = "${browswer}.desktop";
-            "x-scheme-handler/http"             = "${browswer}.desktop";
-            "x-scheme-handler/https"            = "${browswer}.desktop";
-            "x-scheme-handler/about"            = "${browswer}.desktop";
-            "x-scheme-handler/unknown"          = "${browswer}.desktop";
+            "text/html"                         = "${browser}.desktop";
+            "x-scheme-handler/http"             = "${browser}.desktop";
+            "x-scheme-handler/https"            = "${browser}.desktop";
+            "x-scheme-handler/about"            = "${browser}.desktop";
+            "x-scheme-handler/unknown"          = "${browser}.desktop";
             # "image/jpeg"                        = "${feh}.desktop";
             # "image/bmp"                         = "${feh}.desktop";
             # "image/png"                         = "${feh}.desktop";
@@ -363,4 +363,3 @@
 
 #  - setup custom mergetool
 #  - vscode git-diff-and-merge-tool extension
-#  - autorandr - automatically change when screen plugged in

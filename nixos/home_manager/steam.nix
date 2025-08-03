@@ -64,19 +64,4 @@
 }
 
 # TODO:
-#  - configure ssh agent to serve ssh keys from keybase
-#  - better alacritty colours
-#  - clone and load other dotfiles
-#    - vim configuration
-#    - i3 config
-#    - vscode
-#  - messaging apps as services
-#  - firefox extensions config with nixos
-#  - system python & pip or system python alias to docker container?
-#  - pycharm
-#  - vscode extensions
-#  - screen brightness
-#  - programs.light (run without sudo?) + configure light keys
-#    - redshift
-#  - screen locker
 #  - set wm by user?
