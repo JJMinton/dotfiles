@@ -1,0 +1,57 @@
+{
+    // Appearance
+    "workbench.colorTheme": "Default Dark Modern",
+    "editor.lineNumbers": "relative",
+    "editor.rulers": [
+        80,
+        88,
+        120
+    ],
+    "notebook.lineNumbers": "on",
+    // Terminal
+    "terminal.integrated.inheritEnv": false,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    // Remote Development
+    "remote.autoForwardPortsSource": "hybrid",
+    // Formatting
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "cSpell.language": "en-GB",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[python]": {},
+    // Linting
+    "python.missingPackage.severity": "Error",
+    "python.analysis.autoFormatStrings": true,
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.pythonProjects": [],
+    "jenkins.pipeline.linter.connector.url": "https://c06.jenkins.autodesk.com/pipeline-model-converter/validate",
+    "jenkins.pipeline.linter.connector.token": "11813ed4353718475b11b1e32a6aec35c7",
+    "jenkins.pipeline.linter.connector.user": "mintonj",
+    "docker.extension.enableComposeLanguageServer": false,
+    // Debugging
+    "debugpy.debugJustMyCode": false,
+    "jupyter.debugJustMyCode": true,
+    // Version control
+    "git.suggestSmartCommit": false,
+    "git.confirmSync": false,
+    "files.associations": {
+        "*.py": "python"
+    },
+    "githubPullRequests.pullBranch": "never",
+    "scm.workingSets.default": "empty",
+    "scm.showHistoryGraph": false,
+    "workbench.editorAssociations": {
+        "git-rebase-todo": "gitlens.rebase"
+    },
+    "gitlens.rebaseEditor.ordering": "asc",
+    // AI Suggestions
+    "github.copilot.advanced": {},
+    "github.copilot.nextEditSuggestions.enabled": true
+}
