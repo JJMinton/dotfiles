@@ -1,5 +1,75 @@
 # Build instructions in configuration.nix
-{ pkgs, config, ... }: {
+{ pkgs, config, ... }: let 
+    basicService = {
+        desc,
+        cmd,
+        env ? "",
+    }: {
+        Unit = {
+            Description = desc;
+            # TODO: See man-home-configuration.nix for systemd.user.targets
+            After = ["network-online.target"];
+        };
+
+        Service = {
+            ExecStart = cmd;
+            KillSignal = "SIGTERM";
+            TimeoutStopSec = 5;
+            Environment = env;
+        };
+    };
+
+    constrainedService = {
+        cmd,
+        cpu ? "100%",
+        mem ? "1G",
+        desc ? "",
+        env ? "",
+    }: let
+        s = basicService {
+            desc = desc;
+            cmd = cmd;
+            env = env;
+        };
+        # TODO: is there a way to "deep-replace" below instead of having the awkward .Service
+        # replacement?
+        in
+        s
+        // {
+        Service =
+            s.Service
+            // {
+            CPUQuota = cpu;
+            MemoryMax = mem;
+            };
+        };
+    # TODO: for firefoxService and basicService (run under X11) and chromiumService perhaps we need
+    # some X11 configuration. See:
+    # - https://github.com/systemd/systemd/blob/v219/NEWS#L194
+    # - https://wiki.archlinux.org/title/Systemd/User#DISPLAY_and_XAUTHORITY
+    # - https://superuser.com/questions/759759/writing-a-service-that-depends-on-xorg
+    firefoxService = {
+        name,
+        desc,
+        url,
+        env ? "",
+        profile ? name,
+    }:
+        constrainedService {
+            inherit desc;
+            cpu = "150%";
+            mem = "2G";
+            # https://wiki.archlinux.org/title/Firefox#Touchscreen_gestures_and_pixel-perfect_trackpad_scrolling
+            env = "MOZ_USE_XINPUT2=1 GTK_IM_MODULE=ibus QT_IM_MODULE=ibus XMODIFIERS=@im=ibus ${env}";
+            # For some command-line options see:
+            # - https://docs.gtk.org/gtk3/running.html
+            # - https://docs.gtk.org/gtk3/x11.html
+            # - https://wiki.mozilla.org/Firefox/CommandLineOptions
+            # hard-coding https means things won't work for non-https URLs
+            cmd = "${pkgs.firefox}/bin/firefox --no-remote --class=${name} -P ${profile} https://${url}";
+        };
+    dropboxDirectory = "${config.home.homeDirectory}/Dropbox";
+    in {
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
         awscli2
@@ -7,6 +77,10 @@
         # cura # 3d printing slicer # https://github.com/NixOS/nixpkgs/issues/186570
         darktable
         discord
+        ## Dropbox
+        dropbox-cli
+        # maestral
+        # maestral-gui  # alternative dropbox client
         docker-compose
         # feh
         cheese  # take images etc. from webcam
@@ -15,14 +89,12 @@
         inkscape
         keybase-gui
         libreoffice
-        libsForQt5.kdenlive
-        maestral
-        maestral-gui  # alternative dropbox client
         meld  # diffing tool
         ncdu  # disk usage explorer
         notify-osd
         nufraw-thumbnailer  # raw thumbnailer
         kdePackages.okular
+        kdePackages.kdenlive
         openvpn
         playerctl  # for media keys
         slack
@@ -47,8 +119,33 @@
         i3lock #default i3 screen locker
         i3blocks #if you are planning on using i3blocks over i3status
     ];
+    # Install NUR
+    # Used for firefox extensions
+    nixpkgs.config.packageOverrides = pkgs: {
+        nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+            inherit pkgs;
+        };
+        # TODO: import only firefox addons stuff
+        # firefox-addons = { url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons"; inputs.nixpkgs.follows = "nixpkgs"; };
+    };
+
+    # Window manager
+    xsession.windowManager.i3 = {
+        enable = true;
+        package = pkgs.i3-gaps;
+        config = {
+            modifier = "Mod4";
+            gaps = {
+                inner = 10;
+                outer = 5;
+            };
+        };
+    };
 
     # Program config
+    programs.autorandr.hooks = {
+        postswitch."change-background" = "systemctl --user start random-background";
+    };
     programs.alacritty = {
         enable = true;
         settings = {
@@ -140,22 +237,51 @@
             isDefault=true;
             name="default";
             settings = {
-                # browser.startup  # TODO: Make this continue where was left off.
+                "browser.startup.page" = 3;
+                "browser.search.defaultenginename" = "DuckDuckGo";
+                "browser.search.order.1" = "DuckDuckGo";
                 "browser.search.region" = "GB";
                 "browser.search.isUS" = false;
+                "browser.search.suggest.enabled" = false;
                 "distribution.searchplugins.defaultLocale" = "en-GB";
                 "general.useragent.locale" = "en-GB";
+                "signon.rememberSignons" = false;
+                "media.autoplay.default" = 1;
+                "toolkit.cosmeticAnimations.enabled" = false; 
+                "datareporting.healthreport.uploadEnabled" = false;
+                "toolkit.telemetry.server" = "";
+                "network.prefetch-next" = false;
+                "dom.webnotifications.enabled" = false;
             };
-            extensions = [
-                # https-everywhere  # Does this require NUR?
-                # ublock
-                # facebook container
-                # multi-account container
-                # lastpass
-                # vimium
-                # zotero
-            ];
+            extensions = {
+                packages = with pkgs.nur.repos.rycee.firefox-addons; [
+                    ublock-origin
+                    #TODO: keeper
+                    #TODO: use custom firefox_addons
+                    # https-everywhere  # Does this require NUR?
+                    # facebook container
+                    # multi-account container
+                    # lastpass
+                    # vimium
+                    # zotero
+                ];
+                # settings."uBlock@raymondhill.net".settings = {
+                #     selectedFilterLists = [
+                #         "ublock-filters"
+                #         "ublock-badware"
+                #         "ublock-privacy"
+                #         "ublock-unbreak"
+                #         "ublock-quick-fixes"
+                #     ];
+                # };
+            };
+            search = {
+                force = true;
+                default = "ddg";
+                order = [ "ddg" "google" ];
+            };
         };
+
     };
     programs.git = {
         enable = true;
@@ -181,185 +307,209 @@
         };
         lfs.enable = true;
     };
+    programs.jujutsu = {
+        enable = true;
+        settings = {};
+    };
 
     programs.nix-index.enable = true;
     programs.nix-index.enableZshIntegration = true;
     programs.ssh = {
         enable = true;
-        includes = ["${config.home.homeDirectory}/.ssh/*.config" "${config.home.homeDirectory}/.ssh/*/*.config"];
+        includes = ["${config.home.homeDirectory}/.ssh/*/*.config"];
     };
     programs.vscode = {
         enable = true;
-        extensions = with pkgs.vscode-extensions; [
-            # available packages:
-            # https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/extensions/default.nix
-            vscodevim.vim
-            eamodio.gitlens
-            ms-vsliveshare.vsliveshare
-            foam.foam-vscode
-            ms-python.python
-            ms-toolsai.jupyter
-            tomoki1207.pdf
-            ryu1kn.partial-diff
-            github.copilot
-            # rubbersheep.gi
-            # ace jumper
-        ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-            # Script to get entries for installed extensions:
-            # https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/extensions/update_installed_exts.sh
-            {
-                name = "vscode-remote-extensionpack";
-                publisher = "ms-vscode-remote";
-                version = "0.24.0";
-                sha256 = "0sha4l16x4nn3pxm2g6mxlvm7dz56ry2y3ii4b1s9ilckid0kzpa";
-            }
-        ];
-        # user = "${config.user}";
-        # homeDirectory = "${config.home.homeDirectory}";
-        keybindings = [];
-        userSettings = {};
+        profiles.default = {
+            extensions = with pkgs.vscode-extensions; [
+                # available packages:
+                # https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/extensions/default.nix
+                vscodevim.vim
+                eamodio.gitlens
+                ms-vsliveshare.vsliveshare
+                foam.foam-vscode
+                ms-python.python
+                ms-toolsai.jupyter
+                tomoki1207.pdf
+                ryu1kn.partial-diff
+                github.copilot
+                # rubbersheep.gi
+                # ace jumper
+            ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+                # Script to get entries for installed extensions:
+                # https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/extensions/update_installed_exts.sh
+                # {
+                #     name = "vscode-remote-extensionpack";
+                #     publisher = "ms-vscode-remote";
+                #     version = "0.26.0";
+                #     sha256 = "19xm7ic29q8sib02y9143gq8x54bm0mkkl65avbmbhlk7bdwy9ij";
+                # }
+            ];
+            userSettings = {
+                "[nix]"."editor.tabSize" = 2;
+                "editor.lineNumbers" = "relative";
+            };
+            # user = "${config.user}";
+            # homeDirectory = "${config.home.homeDirectory}";
+            keybindings = [];
+            userSettings = {};
+        };
     };
-    programs.zsh = {
-        enable = true;
-        defaultKeymap = "emacs";
-        # autosuggestions.enable = false;
-        enableCompletion = true;
-        shellAliases = let
-            nvim = "${pkgs.neovim}/bin/nvim";
-            broot = "${pkgs.broot}/bin/broot";
+        programs.zsh = {
+            enable = true;
+            defaultKeymap = "emacs";
+            # autosuggestions.enable = false;
+            enableCompletion = true;
+            shellAliases = let
+                nvim = "${pkgs.neovim}/bin/nvim";
+                broot = "${pkgs.broot}/bin/broot";
+            in {
+                ll = "ls -hal";
+                ".." = "cd ..";
+                vim = nvim;
+                vi = nvim;
+                notes = "broot ${config.home.homeDirectory}/repos/dotfiles/notes";
+            };
+        };
+
+        # Services
+        services = {
+            ## remote file systems
+            keybase.enable = true;
+            # keybase file system
+            kbfs = {  # TODO: this isn't working; fix it
+                enable = true;
+                mountPoint = "${config.home.homeDirectory}/keybase";
+            };
+
+            ## Visuals
+            picom = {
+                enable = true;
+                fade = true;
+                inactiveOpacity = 0.9;
+            };
+            random-background = {
+                enable = true;
+                imageDirectory = "${dropboxDirectory}/Pictures/backgrounds";
+            };
+            screen-locker = {
+                enable = true;
+                lockCmd = "${pkgs.i3lock}/bin/i3lock -n -c 000000";
+            };
+
+            ## Hotkeys
+            playerctld.enable = true;  # to control media players with hotkeys
+        };
+
+        systemd.user.services.dropbox  =  { 
+            Unit  =  { 
+                Description  =  "Dropbox service" ; 
+            }; 
+            Install  =  { 
+                WantedBy  =  [  "default.target"  ]; 
+            }; 
+            Service  =  { 
+                ExecStart  =  " ${pkgs.dropbox}/bin/dropbox" ; 
+                Restart  =  "on-failure" ; 
+            }; 
+        }; 
+        systemd.user.services.protonmail = firefoxService{
+            name = "protonmail";
+            desc = "ProtonMail";
+            url = "mail.protonmail.com";
+        };
+
+
+
+        ## File type associations
+        xdg = let 
+            filemanager    = "nautilus";
+            torrent     = "transmission";
+            browser    = "firefox";
         in {
-            ll = "ls -hal";
-            ".." = "cd ..";
-            vim = nvim;
-            vi = nvim;
-            notes = "broot ${config.home.homeDirectory}/repos/dotfiles/notes";
-        };
-    };
-
-    # Services
-    services = {
-        ## remote file systems
-        keybase.enable = true;
-        # keybase file system
-        kbfs = {  # TODO: this isn't working; fix it
             enable = true;
-            mountPoint = "${config.home.homeDirectory}/keybase";
-        };
-
-        ## Visuals
-        picom = {
-            enable = true;
-            fade = true;
-            inactiveOpacity = 0.9;
-        };
-        random-background = {
-            enable = true;
-            imageDirectory = "${config.home.homeDirectory}/Dropbox/Pictures/backgrounds";
-        };
-        screen-locker = {
-            enable = true;
-            lockCmd = "${pkgs.i3lock}/bin/i3lock -n -c 000000";
-        };
-
-        ## Hotkeys
-        playerctld.enable = true;  # to control media players with hotkeys
-
-    };
-    programs.autorandr.hooks = {
-        postswitch."change-background" = "systemctl --user start random-background";
-    };
-
-
-
-    ## File type associations
-    xdg = let 
-        filemanager    = "nautilus";
-        torrent     = "transmission";
-        browser    = "firefox";
-    in {
-        enable = true;
-        desktopEntries = rec {
-            "nautilus" = {
-                name        = "Nautilus file manager";
-                genericName = "File Manager";
-                exec        = "${pkgs.nautilus}/bin/nautilus %U";
-                terminal    = false;
-                categories  = [ "Utility" "FileTools" "FileManager" ];
-                mimeType    = [ "inode/directory" ];
+            desktopEntries = rec {
+                "nautilus" = {
+                    name        = "Nautilus file manager";
+                    genericName = "File Manager";
+                    exec        = "${pkgs.nautilus}/bin/nautilus %U";
+                    terminal    = false;
+                    categories  = [ "Utility" "FileTools" "FileManager" ];
+                    mimeType    = [ "inode/directory" ];
+                };
+                "firefox" = {
+                    name        = "Firefox web browser";
+                    genericName = "Web browser";
+                    exec        = "${pkgs.firefox}/bin/firefox %U";
+                    terminal    = false;
+                    categories  = [ "Network" "WebBrowser" ];
+                    mimeType    = [
+                        "x-scheme-handler/about"
+                        "x-scheme-handler/unknown"
+                        "x-scheme-handler/http"
+                        "x-scheme-handler/https"
+                        "image/svg+xml"
+                    ];
+                };
+                "torrent" = {
+                    name       = "Transmission torrent";
+                    genericName = "Torrent client";
+                    exec        = "${pkgs.transmission-remote-gtk}/bin/transmission-remote-gtk %U";
+                    terminal    = false;
+                    categories  = [ "Network" ];
+                    mimeType    = [
+                        "application/x-bittorrent"
+                        "x-scheme-handler/magnet"
+                    ];
+                };
             };
-            "firefox" = {
-                name        = "Firefox web browser";
-                genericName = "Web browser";
-                exec        = "${pkgs.firefox}/bin/firefox %U";
-                terminal    = false;
-                categories  = [ "Network" "WebBrowser" ];
-                mimeType    = [
-                    "x-scheme-handler/about"
-                    "x-scheme-handler/unknown"
-                    "x-scheme-handler/http"
-                    "x-scheme-handler/https"
-                    "image/svg+xml"
-                ];
-            };
-            "torrent" = {
-                name       = "Transmission torrent";
-                genericName = "Torrent client";
-                exec        = "${pkgs.transmission-remote-gtk}/bin/transmission-remote-gtk %U";
-                terminal    = false;
-                categories  = [ "Network" ];
-                mimeType    = [
-                    "application/x-bittorrent"
-                    "x-scheme-handler/magnet"
-                ];
+            mime.enable = true;
+            mimeApps.enable = true;
+            mimeApps.defaultApplications = {
+                "inode/directory"                   = "${filemanager}.desktop";
+                "text/html"                         = "${browser}.desktop";
+                "x-scheme-handler/http"             = "${browser}.desktop";
+                "x-scheme-handler/https"            = "${browser}.desktop";
+                "x-scheme-handler/about"            = "${browser}.desktop";
+                "x-scheme-handler/unknown"          = "${browser}.desktop";
+                # "image/jpeg"                        = "${feh}.desktop";
+                # "image/bmp"                         = "${feh}.desktop";
+                # "image/png"                         = "${feh}.desktop";
+                # "image/tiff"                        = "${feh}.desktop";
+                # "image/x-icon"                      = "${feh}.desktop";
+                # "image/x-xpixmap"                   = "${feh}.desktop";
+                # "image/x-xbitmap"                   = "${feh}.desktop";
+                # "application/javascript"            = "${vscode}.desktop";
+                # "application/json"                  = "${vscode}.desktop";
+                # "application/x-bzip-compressed-tar" = "${vscode}.desktop";
+                # "application/x-compressed-tar"      = "${vscode}.desktop";
+                # "application/x-shellscript"         = "${vscode}.desktop";
+                # "application/zip"                   = "${vscode}.desktop";
+                # "text/english"                      = "${vscode}.desktop";
+                # "text/plain"                        = "${vscode}.desktop";
+                # "text/rust"                         = "${vscode}.desktop";
+                "application/x-bittorrent"          = "${torrent}.desktop";
+                "x-scheme-handler/magnet"           = "${torrent}.desktop";
             };
         };
-        mime.enable = true;
-        mimeApps.enable = true;
-        mimeApps.defaultApplications = {
-            "inode/directory"                   = "${filemanager}.desktop";
-            "text/html"                         = "${browser}.desktop";
-            "x-scheme-handler/http"             = "${browser}.desktop";
-            "x-scheme-handler/https"            = "${browser}.desktop";
-            "x-scheme-handler/about"            = "${browser}.desktop";
-            "x-scheme-handler/unknown"          = "${browser}.desktop";
-            # "image/jpeg"                        = "${feh}.desktop";
-            # "image/bmp"                         = "${feh}.desktop";
-            # "image/png"                         = "${feh}.desktop";
-            # "image/tiff"                        = "${feh}.desktop";
-            # "image/x-icon"                      = "${feh}.desktop";
-            # "image/x-xpixmap"                   = "${feh}.desktop";
-            # "image/x-xbitmap"                   = "${feh}.desktop";
-            # "application/javascript"            = "${vscode}.desktop";
-            # "application/json"                  = "${vscode}.desktop";
-            # "application/x-bzip-compressed-tar" = "${vscode}.desktop";
-            # "application/x-compressed-tar"      = "${vscode}.desktop";
-            # "application/x-shellscript"         = "${vscode}.desktop";
-            # "application/zip"                   = "${vscode}.desktop";
-            # "text/english"                      = "${vscode}.desktop";
-            # "text/plain"                        = "${vscode}.desktop";
-            # "text/rust"                         = "${vscode}.desktop";
-            "application/x-bittorrent"          = "${torrent}.desktop";
-            "x-scheme-handler/magnet"           = "${torrent}.desktop";
-        };
-    };
 
-    home.stateVersion = "24.11";
-}
+        home.stateVersion = "24.11";
+    }
 
-# TODO:
-#  - configure ssh agent to serve ssh keys from keybase
-#  - better alacritty colours
-#  - clone and load other dotfiles
-#    - vim configuration
-#    - i3 config
-#  - messaging apps as services
-#  - firefox extensions config with nixos
-#  - system python & pip or system python alias to docker container?
-#  - pycharm
-#  - programs.light (run without sudo?)
-#  - redshift
-#  - set wm by user?
-#  - setup devpi as service
+    # TODO:
+    #  - configure ssh agent to serve ssh keys from keybase
+    #  - better alacritty colours
+    #  - clone and load other dotfiles
+    #    - vim configuration
+    #    - i3 config
+    #  - messaging apps as services
+    #  - firefox extensions config with nixos
+    #  - system python & pip or system python alias to docker container?
+    #  - pycharm
+    #  - programs.light (run without sudo?)
+    #  - redshift
+    #  - set wm by user?
+    #  - setup devpi as service
 
-#  - setup custom mergetool
-#  - vscode git-diff-and-merge-tool extension
+    #  - setup custom mergetool
+    #  - vscode git-diff-and-merge-tool extension

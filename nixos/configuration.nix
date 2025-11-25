@@ -59,14 +59,17 @@
     touchpad.disableWhileTyping = true;
   };
   
-  services.displayManager.defaultSession = "none+i3";
+  services.displayManager.defaultSession = lib.mkDefault "none+i3";
 
   # Enable the i3 desktop environment.
   services.xserver = {
     enable = true;
-
-    desktopManager.xterm.enable = false;
-    displayManager.lightdm.enable = true;
+    displayManager = lib.mkDefault {
+      lightdm.enable = true;
+    };
+    desktopManager = lib.mkDefault {
+      xterm.enable = false;
+    };
     windowManager.i3 = {
       enable = true;
       configFile = ../i3/config;
@@ -92,7 +95,7 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -137,6 +140,7 @@
     docker
     firefox
     git
+    jujutsu
     htop
     neovim
     pavucontrol
@@ -153,7 +157,6 @@
   #   enableSSHSupport = true;
   # };
   programs.zsh.enable = true;
-  programs.ssh.startAgent = true;
   programs.light.enable = true;
 
 
@@ -169,13 +172,13 @@
   services.autorandr.defaultTarget = "horizontal";
 
   services.gnome.gnome-keyring.enable = true;
+  security.pam.services.lightdm.enableGnomeKeyring = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
   # security.sudo.extraRules = [
   #   { groups = [ "sudo" ]; commands = [ "ALL" ]; };
   # ];
-  security.pam.services.lightdm.enableGnomeKeyring = true;
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;

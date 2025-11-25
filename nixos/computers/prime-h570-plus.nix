@@ -7,9 +7,11 @@
     <nixos-hardware/common/gpu/nvidia/ampere>
   ];
   # Other config
-  services.xserver.xkb.layout = lib.mkDefault "gb";  # Keyboard layout
+  services.xserver.xkb = {
+    layout = lib.mkDefault "gb";  # Keyboard layout
+    variant = lib.mkDefault "mac";  # Keyboard variant
+  };
   # boot.loader.efi.efiSysMountPoint = "/efi";
-  hardware.pulseaudio.enable = false;
 
   # NVIDIA RTX 3060 configuration
   hardware.nvidia = {
@@ -23,6 +25,15 @@
 
   # Optional: Enable hardware acceleration for Vulkan and OpenGL
   hardware.graphics.enable = true;
+
+  fileSystems."/home" = { 
+    device = "/dev/disk/by-uuid/cc065468-07ca-4829-968a-063d9424a82f";
+    fsType = "ext4";
+  };
+  fileSystems."/home/jeremy/Dropbox" = { 
+    device = "/dev/disk/by-uuid/658e5277-6ff6-4d36-8c5a-ae15926506f8";
+    fsType = "ext4";
+  };
 
   services.autorandr = lib.mkDefault {
     enable = lib.mkDefault true;
