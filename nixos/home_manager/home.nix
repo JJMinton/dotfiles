@@ -100,7 +100,7 @@
         slack
         signal-desktop
         spotify
-        tdesktop  # telegram
+        telegram-desktop
         teams-for-linux  # Microsoft teams
         tldr  # manual
         transmission_4  # torrent
@@ -132,7 +132,7 @@
     # Window manager
     xsession.windowManager.i3 = {
         enable = true;
-        package = pkgs.i3-gaps;
+        package = pkgs.i3;
         config = {
             modifier = "Mod4";
             gaps = {
