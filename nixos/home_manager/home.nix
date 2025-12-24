@@ -69,6 +69,9 @@
             cmd = "${pkgs.firefox}/bin/firefox --no-remote --class=${name} -P ${profile} https://${url}";
         };
     dropboxDirectory = "${config.home.homeDirectory}/Dropbox";
+    keybaseDirectory = "${config.home.homeDirectory}/keybase";
+    reposDirectory = "${config.home.homeDirectory}/repos";
+    dotfiles = "${reposDirectory}/dotfiles";
     in {
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
@@ -368,7 +371,7 @@
                 ".." = "cd ..";
                 vim = nvim;
                 vi = nvim;
-                notes = "broot ${config.home.homeDirectory}/repos/dotfiles/notes";
+                notes = "broot ${dotfiles}/notes";
             };
         };
 
@@ -379,7 +382,7 @@
             # keybase file system
             kbfs = {  # TODO: this isn't working; fix it
                 enable = true;
-                mountPoint = "${config.home.homeDirectory}/keybase";
+                mountPoint = "${keybaseDirectory}";
             };
 
             ## Visuals
