@@ -78,9 +78,9 @@
         darktable
         discord
         ## Dropbox
-        dropbox-cli
-        # maestral
-        # maestral-gui  # alternative dropbox client
+        # dropbox-cli
+        maestral
+        maestral-gui  # alternative dropbox client
         docker-compose
         # feh
         cheese  # take images etc. from webcam
@@ -372,7 +372,7 @@
             };
         };
 
-        # Services
+        # Servicea
         services = {
             ## remote file systems
             keybase.enable = true;

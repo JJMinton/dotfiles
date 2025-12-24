@@ -203,8 +203,6 @@ bindsym XF86MonBrightnessDown exec sudo light -U 10 # decrease screen brightness
 
 
 #### Background applications
-# Set background image
-exec --no-startup-id "feh --randomize --bg-fill ~/.wallpapers/*"
 # Run compton for semi-transparent windows
 # requires `sudo apt install compton`
 exec --no-startup-id "compton --config ~/.config/i3/compton.conf -b"
