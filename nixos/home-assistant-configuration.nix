@@ -16,8 +16,7 @@
     [
       # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-      <home-manager/nixos>
-      ./computers/prime-h570-plus.nix
+      ./computers/old-desktop.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -38,7 +37,7 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.wlp2s0.useDHCP = true;
+  networking.interfaces.enp4s0.useDHCP = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
@@ -99,31 +98,14 @@
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.groups.fuse = { };
-
-  users.users.jeremy = {
+  users.users.catleyha = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    home = "/home/jeremy";
+    home = "/home/catleyha";
     description = "Jeremy Minton";
-    extraGroups = [ "wheel" "sudo" "docker" "fuse" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
   };
-  home-manager.users.jeremy = import ./home_manager/home.nix;
 
-  # users.users.guest = {
-  #   isNormalUser = true;
-  #   home = "/home/guest";
-  #   description = "Guest";
-  # };
-  # # home-manager.users.guest = import ./home_manager/guest.nix;
-
-  # users.users.steam = {
-  #   isNormalUser = true;
-  #   home = "/home/steam";
-  #   description = "For playing games";
-  #   extraGroups = [ "sudo" ];
-  # };
-  # home-manager.users.steam = import ./home_manager/steam.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -176,21 +158,13 @@
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
   # security.sudo.extraRules = [
   #   { groups = [ "sudo" ]; commands = [ "ALL" ]; };
   # ];
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
-  };
-
-  security.wrappers.fusermount = {
-    source = "${pkgs.fuse}/bin/fusermount";
-    owner = "root";
-    group = "root";
-    setuid = true;
-    permissions = "u+rx,g+x,o+x";
   };
 
   # Open ports in the firewall.
@@ -207,13 +181,22 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.09"; # Did you read the comment?
 
-  virtualisation.docker = {
+  services.home-assistant = {
     enable = true;
+    config = {
+      homeassistant = {
+        name = "Home";
+        latitude = "!secret latitude";
+        longitude = "!secret longitude";
+        elevation = "!secret elevation";
+        unit_system = "metric";
+        time_zone = "UTC";
+      };
+      frontend = {
+        themes = "!include_dir_merge_named themes";
+      };
+      http = {};
+      feedreader.urls = [ "https://nixos.org/blogs.xml" ];
+    };
   };
-
 }
-
-
-# TODO:
-# [ ] add screen brightness controls
-#       programs.light package was removed due to being unmaintained upstream. `brightnessctl` and `hardware.acpilight` offer replacements
