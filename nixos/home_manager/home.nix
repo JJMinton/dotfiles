@@ -1,5 +1,5 @@
 # Build instructions in configuration.nix
-{ pkgs, config, ... }: let 
+{ pkgs, config, lib, ... }: let 
     basicService = {
         desc,
         cmd,
@@ -68,9 +68,12 @@
             # hard-coding https means things won't work for non-https URLs
             cmd = "${pkgs.firefox}/bin/firefox --no-remote --class=${name} -P ${profile} https://${url}";
         };
-    dropboxDirectory = "${config.home.homeDirectory}/Dropbox";
-    keybaseDirectory = "${config.home.homeDirectory}/keybase";
-    reposDirectory = "${config.home.homeDirectory}/repos";
+    homeDir = config.home.homeDirectory;
+    dropboxDirectory = "${homeDir}/Dropbox";
+    keybaseDirectory = "${homeDir}/keybase";
+    sshKeybaseDirectory = "${keybaseDirectory}/private/jeremyminton/ssh";
+    sshHostDirs = [ "github.com" "gitlab.com" "bitbucket.org" "aws" "tripodium" ];
+    reposDirectory = "${homeDir}/repos";
     dotfiles = "${reposDirectory}/dotfiles";
     in {
     nixpkgs.config.allowUnfree = true;
@@ -86,6 +89,7 @@
         maestral-gui  # alternative dropbox client
         docker-compose
         # feh
+        fuse  # required by kbfs
         cheese  # take images etc. from webcam
         nautilus
         imagemagick  # for screenshot
@@ -114,7 +118,7 @@
         zip
         zotero
         xclip  # clipboard CLI command
-        xorg.xhost
+        xhost
         
         # Needed for i3 manager
         dmenu #application launcher most people use
@@ -122,6 +126,13 @@
         i3lock #default i3 screen locker
         i3blocks #if you are planning on using i3blocks over i3status
     ];
+    home.file = builtins.listToAttrs (map (dir: {
+        name = ".ssh/${dir}";
+        value = {
+            source = config.lib.file.mkOutOfStoreSymlink "${sshKeybaseDirectory}/${dir}";
+        };
+    }) sshHostDirs);
+
     # Install NUR
     # Used for firefox extensions
     nixpkgs.config.packageOverrides = pkgs: {
@@ -235,6 +246,7 @@
     };
     programs.firefox = {
         enable = true;
+        configPath = "${config.xdg.configHome}/mozilla/firefox";
         profiles.default = {
             id=0;
             isDefault=true;
@@ -288,9 +300,11 @@
     };
     programs.git = {
         enable = true;
-        userName = "Jeremy Minton";
-        userEmail = "jeremyminton@pm.me";
-        extraConfig = {
+        settings = {
+            user = {
+                name = "Jeremy Minton";
+                email = "jeremyminton@pm.me";
+            };
             # Useful for extraConfig: https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
             diff.tool = "vimdiff2";
             diff.algorithm = "histogram";
@@ -319,7 +333,11 @@
     programs.nix-index.enableZshIntegration = true;
     programs.ssh = {
         enable = true;
-        includes = ["${config.home.homeDirectory}/.ssh/*/*.config"];
+        includes = [
+            "${config.home.homeDirectory}/.ssh/*/*.config"
+            "${config.home.homeDirectory}/keybase/private/jeremyminton/ssh/*/*.config"
+        ];
+        enableDefaultConfig = false;
     };
     programs.vscode = {
         enable = true;
@@ -361,6 +379,7 @@
         programs.zsh = {
             enable = true;
             defaultKeymap = "emacs";
+            dotDir = "${config.xdg.configHome}/zsh";
             # autosuggestions.enable = false;
             enableCompletion = true;
             shellAliases = let
@@ -380,9 +399,9 @@
             ## remote file systems
             keybase.enable = true;
             # keybase file system
-            kbfs = {  # TODO: this isn't working; fix it
+            kbfs = {
                 enable = true;
-                mountPoint = "${keybaseDirectory}";
+                mountPoint = lib.removePrefix "${homeDir}/" keybaseDirectory;
             };
 
             ## Visuals
@@ -404,15 +423,15 @@
             playerctld.enable = true;  # to control media players with hotkeys
         };
 
-        systemd.user.services.dropbox  =  { 
+        systemd.user.services.maestral  =  { 
             Unit  =  { 
-                Description  =  "Dropbox service" ; 
+                Description  =  "Maestral service (dropbox clone)" ; 
             }; 
             Install  =  { 
                 WantedBy  =  [  "default.target"  ]; 
             }; 
             Service  =  { 
-                ExecStart  =  " ${pkgs.dropbox}/bin/dropbox" ; 
+                ExecStart  =  " ${pkgs.maestral}/bin/maestral start" ; 
                 Restart  =  "on-failure" ; 
             }; 
         }; 
@@ -431,6 +450,7 @@
             browser    = "firefox";
         in {
             enable = true;
+            configHome = "${homeDir}/.config";
             desktopEntries = rec {
                 "nautilus" = {
                     name        = "Nautilus file manager";

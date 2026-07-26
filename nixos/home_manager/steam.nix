@@ -11,7 +11,6 @@
         signal-desktop
         spotify
         zip
-        zotero
     ];
 
     # Program config
@@ -56,9 +55,6 @@
     # Services config
     services.keybase.enable = true;
     services.kbfs.enable = true;
-
-    # services.dropbox.enable = true;
-    # services.dropbox.path = "${config.home.homeDirectory}/Dropbox";
 
     home.stateVersion = "20.09";
 }

@@ -28,9 +28,6 @@
   };
 
 
-  # networking.hostName = "nixos"; # Define your hostname.
-  networking.wireless.enable = false;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;
     
   # Set your time zone.
   # time.timeZone = "Europe/Paris";
@@ -42,6 +39,9 @@
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.wlp2s0.useDHCP = true;
+
+  # networking.hostName = "nixos"; # Define your hostname.
+  networking.networkmanager.enable = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -99,12 +99,14 @@
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.groups.fuse = { };
+
   users.users.jeremy = {
     isNormalUser = true;
     shell = pkgs.zsh;
     home = "/home/jeremy";
     description = "Jeremy Minton";
-    extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "sudo" "docker" "fuse" ]; # Enable ‘sudo’ for the user.
   };
   home-manager.users.jeremy = import ./home_manager/home.nix;
 
@@ -157,7 +159,6 @@
   #   enableSSHSupport = true;
   # };
   programs.zsh.enable = true;
-  programs.light.enable = true;
 
 
   nixpkgs.config.allowUnfree = true;
@@ -184,6 +185,14 @@
     wheelNeedsPassword = false;
   };
 
+  security.wrappers.fusermount = {
+    source = "${pkgs.fuse}/bin/fusermount";
+    owner = "root";
+    group = "root";
+    setuid = true;
+    permissions = "u+rx,g+x,o+x";
+  };
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -203,3 +212,8 @@
   };
 
 }
+
+
+# TODO:
+# [ ] add screen brightness controls
+#       programs.light package was removed due to being unmaintained upstream. `brightnessctl` and `hardware.acpilight` offer replacements
