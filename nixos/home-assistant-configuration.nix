@@ -122,6 +122,7 @@
     neovim
     pavucontrol
     pciutils
+    vscode
     wget
     zsh
   ];
@@ -181,7 +182,6 @@
         name = "Home";
         latitude = "!secret latitude";
         longitude = "!secret longitude";
-        elevation = "!secret elevation";
         unit_system = "metric";
         time_zone = "UTC";
       };
@@ -191,5 +191,13 @@
       http = {};
       feedreader.urls = [ "https://nixos.org/blogs.xml" ];
     };
+    extraComponents = [
+      "radio_browser"
+      "google_translate"
+      "isal"
+    ];
+    extraPackages = python3Packages: with python3Packages; [
+    ];
   };
+
 }
