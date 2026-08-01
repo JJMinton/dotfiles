@@ -6,12 +6,6 @@
     <nixos-hardware/common/cpu/intel>
     <nixos-hardware/common/gpu/nvidia/ampere>
   ];
-  # Other config
-  services.xserver.xkb = {
-    layout = lib.mkDefault "gb";  # Keyboard layout
-    variant = lib.mkDefault "mac";  # Keyboard variant
-  };
-  # boot.loader.efi.efiSysMountPoint = "/efi";
 
   # NVIDIA RTX 3060 configuration
   hardware.nvidia = {
@@ -33,6 +27,19 @@
   fileSystems."/home/jeremy/Dropbox" = { 
     device = "/dev/disk/by-uuid/658e5277-6ff6-4d36-8c5a-ae15926506f8";
     fsType = "ext4";
+  };
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.grub = {
+    configurationLimit = 3;
+    efiSupport = true;
+    device = "nodev";
+  };
+  # boot.loader.efi.efiSysMountPoint = "/efi";
+
+  services.xserver.xkb = {
+    layout = lib.mkDefault "gb";  # Keyboard layout
+    variant = lib.mkDefault "mac";  # Keyboard variant
   };
 
   services.autorandr = lib.mkDefault {

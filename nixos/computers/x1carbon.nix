@@ -8,6 +8,12 @@
 
   #common/gpu/intel via common/cpu/intel
   boot.initrd.kernelModules = [ "i915" ];
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.grub = {
+    configurationLimit = 3;
+    efiSupport = true;
+    device = "nodev";
+  };
 
   environment.variables = {
     VDPAU_DRIVER = lib.mkIf config.hardware.opengl.enable (lib.mkDefault "va_gl");

@@ -19,13 +19,6 @@
       ./computers/old-desktop.nix
     ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.grub = {
-    configurationLimit = 3;
-    efiSupport = true;
-    device = "nodev";
-  };
-
 
     
   # Set your time zone.

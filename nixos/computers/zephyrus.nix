@@ -4,6 +4,12 @@
 {
 
   # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.grub = {
+    configurationLimit = 3;
+    efiSupport = true;
+    device = "nodev";
+  };
   boot.loader.efi = {
     canTouchEfiVariables = true;
     efiSysMountPoint = "/boot/efi";

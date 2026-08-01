@@ -19,15 +19,6 @@
       <home-manager/nixos>
       ./computers/prime-h570-plus.nix
     ];
-
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.grub = {
-    configurationLimit = 3;
-    efiSupport = true;
-    device = "nodev";
-  };
-
-
     
   # Set your time zone.
   # time.timeZone = "Europe/Paris";
