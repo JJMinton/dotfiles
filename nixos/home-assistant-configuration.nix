@@ -9,7 +9,9 @@
 # Consider using -p to name the build
 
 { config, pkgs, lib, callPackage, ... }:
-
+let
+  lanInterface = "enp4s0";
+in
 {
 
   imports =
@@ -30,7 +32,7 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp4s0.useDHCP = true;
+  networking.interfaces.${lanInterface}.useDHCP = true;
 
   networking.hostName = "homeassistant";
   networking.networkmanager.enable = true;
@@ -161,9 +163,6 @@
       workstation = true;
     };
   };
-  
-  networking.firewall.allowedUDPPorts = [ 5353 ];
-  networking.firewall.allowedTCPPorts = [ 80 ];
 
   services.nginx = {
     enable = true;
@@ -176,10 +175,15 @@
     };
   };
 
+ networking.firewall.interfaces.${lanInterface} = {
+   allowedUDPPorts = [ 5353 ];
+   allowedTCPPorts = [ 22 80 ];
+ };
+
   # Enable the OpenSSH daemon and allow SSH from the LAN.
   services.openssh = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
   };
   # security.sudo.extraRules = [
   #   { groups = [ "sudo" ]; commands = [ "ALL" ]; };
@@ -205,7 +209,7 @@
 
   services.home-assistant = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
     config = {
       homeassistant = {
         name = "Home";
