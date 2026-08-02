@@ -72,7 +72,7 @@
     dropboxDirectory = "${homeDir}/Dropbox";
     keybaseDirectory = "${homeDir}/keybase";
     sshKeybaseDirectory = "${keybaseDirectory}/private/jeremyminton/ssh";
-    sshHostDirs = [ "github.com" "gitlab.com" "bitbucket.org" "aws" "tripodium" ];
+    sshHostDirs = [ "github.com" "gitlab.com" "bitbucket.org" "aws" "tripodium" "lan" ];
     reposDirectory = "${homeDir}/repos";
     dotfiles = "${reposDirectory}/dotfiles";
     in {

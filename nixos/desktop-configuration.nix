@@ -164,6 +164,13 @@
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
+
+  # Enable Avahi for mDNS/DNS-SD service discovery (e.g. for <name>.local addresses)
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+  };
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
   # security.sudo.extraRules = [

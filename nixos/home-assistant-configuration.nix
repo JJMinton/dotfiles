@@ -32,7 +32,7 @@
   networking.useDHCP = false;
   networking.interfaces.enp4s0.useDHCP = true;
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "homeassistant";
   networking.networkmanager.enable = true;
 
   # Configure network proxy if necessary
@@ -150,6 +150,19 @@
 
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.lightdm.enableGnomeKeyring = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+    };
+  };
+
+  networking.firewall.allowedUDPPorts = [ 5353 ];
 
   # Enable the OpenSSH daemon and allow SSH from the LAN.
   services.openssh = {
