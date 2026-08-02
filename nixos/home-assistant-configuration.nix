@@ -151,8 +151,11 @@
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  # Enable the OpenSSH daemon and allow SSH from the LAN.
+  services.openssh = {
+    enable = true;
+    openFirewall = true;
+  };
   # security.sudo.extraRules = [
   #   { groups = [ "sudo" ]; commands = [ "ALL" ]; };
   # ];
@@ -177,6 +180,7 @@
 
   services.home-assistant = {
     enable = true;
+    openFirewall = true;
     config = {
       homeassistant = {
         name = "Home";
