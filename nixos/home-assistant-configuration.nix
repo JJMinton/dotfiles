@@ -8,7 +8,7 @@
 # ```nixos-rebuild switch -I nixos-config=./configuration.nix```
 # Consider using -p to name the build
 
-{ config, pkgs, lib, callPackage, ... }: 
+{ config, pkgs, lib, callPackage, ... }:
 
 {
 
@@ -161,8 +161,20 @@
       workstation = true;
     };
   };
-
+  
   networking.firewall.allowedUDPPorts = [ 5353 ];
+  networking.firewall.allowedTCPPorts = [ 80 ];
+
+  services.nginx = {
+    enable = true;
+    virtualHosts."homeassistant.local" = {
+      default = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:8123";
+        proxyWebsockets = true;
+      };
+    };
+  };
 
   # Enable the OpenSSH daemon and allow SSH from the LAN.
   services.openssh = {
