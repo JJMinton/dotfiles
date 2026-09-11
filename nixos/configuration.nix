@@ -12,14 +12,6 @@
 
 {
 
-  imports =
-    [
-      # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
-      <home-manager/nixos>
-      ./computers/prime-h570-plus.nix
-    ];
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.grub = {
     configurationLimit = 3;

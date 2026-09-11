@@ -4,7 +4,14 @@ Configuration files
 
 ### Rebuild
 ```
-sudo nixos-rebuild switch -I nixos-config=/home/jeremy/repos/dotfiles/nixos/configuration.nix --upgrade-all
+sudo nixos-rebuild switch --flake /home/jeremy/repos/dotfiles#desktop
+```
+
+Update flake inputs with `nix flake update`, then rebuild. The generated `flake.lock` pins the Nixpkgs, Home Manager, NUR, and nixos-hardware revisions.
+
+To test without activating the system:
+```
+sudo nixos-rebuild dry-build --flake /home/jeremy/repos/dotfiles#nixos
 ```
 
 ### Nixos clean-up

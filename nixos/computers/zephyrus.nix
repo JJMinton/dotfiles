@@ -1,5 +1,5 @@
 
-{ config, pkgs, lib, callPackage, ... }: 
+{ config, pkgs, lib, callPackage, inputs, ... }: 
 
 {
 
@@ -11,7 +11,7 @@
 
   imports = [
       # optimised hardware config from https://github.com/NixOS/nixos-hardware
-      <nixos-hardware/asus/zephyrus/ga401>
+      (inputs.nixos-hardware + "/asus/zephyrus/ga401")
   ];
 
   # Temperature management

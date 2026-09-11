@@ -1,10 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 {
 
   imports = [
-    <nixos-hardware/common/pc/ssd>
-    <nixos-hardware/common/cpu/intel>
-    <nixos-hardware/common/gpu/nvidia/ampere>
+    (inputs.nixos-hardware + "/common/pc/ssd")
+    (inputs.nixos-hardware + "/common/cpu/intel")
+    (inputs.nixos-hardware + "/common/gpu/nvidia/ampere")
   ];
   # Other config
   services.xserver.xkb = {

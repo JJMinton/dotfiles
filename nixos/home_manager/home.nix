@@ -1,5 +1,5 @@
 # Build instructions in configuration.nix
-{ pkgs, config, lib, ... }: let 
+{ pkgs, config, lib, inputs, ... }: let 
     basicService = {
         desc,
         cmd,
@@ -134,8 +134,9 @@
     # Install NUR
     # Used for firefox extensions
     nixpkgs.config.packageOverrides = pkgs: {
-        nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-            inherit pkgs;
+        nur = import inputs.nur {
+                inherit pkgs;
+                nurpkgs = pkgs;
         };
         # TODO: import only firefox addons stuff
         # firefox-addons = { url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons"; inputs.nixpkgs.follows = "nixpkgs"; };
