@@ -94,12 +94,10 @@
         nautilus
         imagemagick  # for screenshot
         inkscape
-        keybase-gui
         libreoffice
         meld  # diffing tool
         ncdu  # disk usage explorer
         notify-osd
-        nufraw-thumbnailer  # raw thumbnailer
         kdePackages.okular
         kdePackages.kdenlive
         openvpn
@@ -423,18 +421,24 @@
             playerctld.enable = true;  # to control media players with hotkeys
         };
 
-        systemd.user.services.maestral  =  { 
-            Unit  =  { 
-                Description  =  "Maestral service (dropbox clone)" ; 
-            }; 
-            Install  =  { 
-                WantedBy  =  [  "default.target"  ]; 
-            }; 
-            Service  =  { 
-                ExecStart  =  " ${pkgs.maestral}/bin/maestral start" ; 
-                Restart  =  "on-failure" ; 
-            }; 
-        }; 
+        systemd.user.services.maestral = {
+            Unit = {
+                Description = "Maestral Dropbox daemon";
+                After = [ "network-online.target" ];
+                Wants = [ "network-online.target" ];
+            };
+
+            Install = {
+                WantedBy = [ "default.target" ];
+            };
+
+            Service = {
+                ExecStart = "${pkgs.maestral}/bin/maestral start --foreground";
+                Restart = "on-failure";
+                RestartSec = 5;
+                Environment = [ "HOME=%h" ];
+            };
+        };
         systemd.user.services.protonmail = firefoxService{
             name = "protonmail";
             desc = "ProtonMail";
@@ -451,6 +455,12 @@
         in {
             enable = true;
             configHome = "${homeDir}/.config";
+            configFile."maestral/config.json".text = ''
+                {
+                    "dropbox_path": "${homeDir}/Dropbox",
+                    "check_for_updates": true
+                }                
+            '';
             desktopEntries = rec {
                 "nautilus" = {
                     name        = "Nautilus file manager";
@@ -536,3 +546,4 @@
 
     #  - setup custom mergetool
     #  - vscode git-diff-and-merge-tool extension
+    #  - Add a thumbnail generator for nautilus
