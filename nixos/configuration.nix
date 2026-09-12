@@ -34,6 +34,11 @@
 
   # networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
+  services.avahi = {  # Avahi is a service for local netowrk discovery
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
