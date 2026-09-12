@@ -1,73 +1,5 @@
 # Build instructions in configuration.nix
-{ pkgs, config, lib, inputs, ... }: let 
-    basicService = {
-        desc,
-        cmd,
-        env ? "",
-    }: {
-        Unit = {
-            Description = desc;
-            # TODO: See man-home-configuration.nix for systemd.user.targets
-            After = ["network-online.target"];
-        };
-
-        Service = {
-            ExecStart = cmd;
-            KillSignal = "SIGTERM";
-            TimeoutStopSec = 5;
-            Environment = env;
-        };
-    };
-
-    constrainedService = {
-        cmd,
-        cpu ? "100%",
-        mem ? "1G",
-        desc ? "",
-        env ? "",
-    }: let
-        s = basicService {
-            desc = desc;
-            cmd = cmd;
-            env = env;
-        };
-        # TODO: is there a way to "deep-replace" below instead of having the awkward .Service
-        # replacement?
-        in
-        s
-        // {
-        Service =
-            s.Service
-            // {
-            CPUQuota = cpu;
-            MemoryMax = mem;
-            };
-        };
-    # TODO: for firefoxService and basicService (run under X11) and chromiumService perhaps we need
-    # some X11 configuration. See:
-    # - https://github.com/systemd/systemd/blob/v219/NEWS#L194
-    # - https://wiki.archlinux.org/title/Systemd/User#DISPLAY_and_XAUTHORITY
-    # - https://superuser.com/questions/759759/writing-a-service-that-depends-on-xorg
-    firefoxService = {
-        name,
-        desc,
-        url,
-        env ? "",
-        profile ? name,
-    }:
-        constrainedService {
-            inherit desc;
-            cpu = "150%";
-            mem = "2G";
-            # https://wiki.archlinux.org/title/Firefox#Touchscreen_gestures_and_pixel-perfect_trackpad_scrolling
-            env = "MOZ_USE_XINPUT2=1 GTK_IM_MODULE=ibus QT_IM_MODULE=ibus XMODIFIERS=@im=ibus ${env}";
-            # For some command-line options see:
-            # - https://docs.gtk.org/gtk3/running.html
-            # - https://docs.gtk.org/gtk3/x11.html
-            # - https://wiki.mozilla.org/Firefox/CommandLineOptions
-            # hard-coding https means things won't work for non-https URLs
-            cmd = "${pkgs.firefox}/bin/firefox --no-remote --class=${name} -P ${profile} https://${url}";
-        };
+{ pkgs, config, lib, inputs, ... }: let
     homeDir = config.home.homeDirectory;
     dropboxDirectory = "${homeDir}/Dropbox";
     keybaseDirectory = "${homeDir}/keybase";
@@ -77,6 +9,7 @@
     dotfiles = "${reposDirectory}/dotfiles";
     in {
     nixpkgs.config.allowUnfree = true;
+    imports = [ ./my-services.nix ];
     home.packages = with pkgs; [
         awscli2
         chromium
@@ -407,7 +340,15 @@
             };
         };
 
-        # Servicea
+        # Services
+        my-services = {
+            gcalendar.enable = true;
+            gmail.enable = true;
+            outlook.enable = true;
+            outlookcalendar.enable = true;
+            whatsapp.enable = true;
+            protonmail.enable = true;
+        };
         services = {
             ## remote file systems
             keybase.enable = true;
@@ -454,14 +395,6 @@
                 Environment = [ "HOME=%h" ];
             };
         };
-        systemd.user.services.protonmail = firefoxService{
-            name = "protonmail";
-            desc = "ProtonMail";
-            url = "mail.protonmail.com";
-        };
-
-
-
         ## File type associations
         xdg = let 
             filemanager    = "nautilus";
